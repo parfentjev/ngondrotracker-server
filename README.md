@@ -1,3 +1,3 @@
 # ngondrotracker-server
 
-Backend server for [ngondrotracker.eu|https://www.ngondrotracker.eu/].
+Backend server for ngondrotracker.eu.
