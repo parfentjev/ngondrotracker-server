@@ -33,11 +33,7 @@ public class UserTokenServiceImpl implements UserTokenService {
                 .withClaim("expirationDate", expirationDate)
                 .sign(algorithm);
 
-        UserTokenDto tokenDto = new UserTokenDto();
-        tokenDto.setToken(token);
-        tokenDto.setExpirationDate(expirationDate);
-
-        return tokenDto;
+        return new UserTokenDto(token, expirationDate);
     }
 
     @Override
@@ -54,6 +50,11 @@ public class UserTokenServiceImpl implements UserTokenService {
     @Override
     public String getUsernameFromToken(String token) {
         return decode(token).getClaim("username").asString();
+    }
+
+    @Override
+    public UserTokenDto refreshToken(String currentToken) {
+        return generateToken(decode(currentToken).getClaim("username").asString());
     }
 
     private DecodedJWT decode(String token) {

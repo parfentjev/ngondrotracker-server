@@ -8,4 +8,6 @@ public interface UserTokenService {
     boolean isValid(String token);
 
     String getUsernameFromToken(String token);
+
+    UserTokenDto refreshToken(String currentToken);
 }

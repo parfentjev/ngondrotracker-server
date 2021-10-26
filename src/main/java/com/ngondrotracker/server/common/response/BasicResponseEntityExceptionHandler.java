@@ -4,6 +4,7 @@ import com.ngondrotracker.server.common.support.factory.BasicResponseFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,7 +19,14 @@ public class BasicResponseEntityExceptionHandler extends ResponseEntityException
     public ResponseEntity<BasicResponse> exceptionHandler(Exception exception) {
         BasicResponse response = new BasicResponseFactory().notSuccessful(exception.getMessage());
 
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        HttpStatus httpStatus;
+        if (exception.getClass() == AccessDeniedException.class) {
+            httpStatus = HttpStatus.FORBIDDEN;
+        } else {
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<>(response, httpStatus);
     }
 
     @Override
