@@ -3,7 +3,6 @@ package com.ngondrotracker.server.user.model;
 import com.ngondrotracker.server.user.enums.UserRole;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class User {
