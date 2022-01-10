@@ -1,6 +1,6 @@
 package com.ngondrotracker.server.user.service;
 
-import com.ngondrotracker.server.user.exception.AuthenticationException;
+import com.ngondrotracker.server.common.exception.ItemAlreadyExistsException;
 import com.ngondrotracker.server.user.model.UserTokenDto;
 import com.ngondrotracker.server.user.service.interfaces.UserAuthenticationService;
 import com.ngondrotracker.server.user.service.interfaces.UserService;
@@ -28,9 +28,9 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
     private AuthenticationManager authenticationManager;
 
     @Override
-    public UserTokenDto signup(String username, String password) {
+    public UserTokenDto signup(String username, String password) throws ItemAlreadyExistsException {
         if (userService.exists(username))
-            throw new AuthenticationException("ALREADY_EXISTS");
+            throw new ItemAlreadyExistsException();
 
         userService.create(username, passwordEncoder.encode(password));
 

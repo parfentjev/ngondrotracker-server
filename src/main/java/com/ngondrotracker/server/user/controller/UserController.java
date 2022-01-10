@@ -6,7 +6,7 @@ import com.ngondrotracker.server.common.support.factory.ResultResponseFactory;
 import com.ngondrotracker.server.user.controller.request.SignInRequest;
 import com.ngondrotracker.server.user.controller.request.SignUpRequest;
 import com.ngondrotracker.server.user.controller.response.AuthenticationResponse;
-import com.ngondrotracker.server.user.exception.AuthenticationException;
+import com.ngondrotracker.server.common.exception.ItemAlreadyExistsException;
 import com.ngondrotracker.server.user.model.UserTokenDto;
 import com.ngondrotracker.server.user.service.interfaces.UserAuthenticationService;
 import com.ngondrotracker.server.user.service.interfaces.UserTokenService;
@@ -47,7 +47,7 @@ public class UserController extends AbstractRestController {
                     .collect(Collectors.joining(","));
 
             response = new ResultResponseFactory<AuthenticationResponse>().successful(new AuthenticationResponse(token, roles));
-        } catch (AuthenticationException e) {
+        } catch (ItemAlreadyExistsException e) {
             response = new ResultResponseFactory<AuthenticationResponse>().notSuccessful(e.getMessage());
         }
 
@@ -73,7 +73,7 @@ public class UserController extends AbstractRestController {
     }
 
     @GetMapping(path = "/refreshToken", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize(HAS_ANY_ROLE)
+    @PreAuthorize(ANY_ROLE)
     public ResponseEntity<ResultResponse<UserTokenDto>> refreshToken(@RequestHeader("Authorization") String authorizationHeader) {
         String currentToken = authorizationHeader.substring(7);
         UserTokenDto token = userTokenService.refreshToken(currentToken);

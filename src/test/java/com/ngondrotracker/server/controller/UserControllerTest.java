@@ -1,6 +1,6 @@
 package com.ngondrotracker.server.controller;
 
-import com.ngondrotracker.server.user.exception.AuthenticationException;
+import com.ngondrotracker.server.common.exception.ItemAlreadyExistsException;
 import com.ngondrotracker.server.user.model.UserTokenDto;
 import com.ngondrotracker.server.user.service.interfaces.UserAuthenticationService;
 import com.ngondrotracker.server.user.service.interfaces.UserTokenService;
@@ -86,7 +86,7 @@ public class UserControllerTest extends AbstractControllerTest {
     @DisplayName("POST /user/signup user already exists")
     public void signInUserAlreadyExists() throws Exception {
         Mockito.when(authenticationService.signup(any(), any()))
-                .thenThrow(new AuthenticationException("ALREADY_EXISTS"));
+                .thenThrow(new ItemAlreadyExistsException());
 
         MockHttpServletRequestBuilder request = post("/user/signup")
                 .contentType(MediaType.APPLICATION_JSON)

@@ -1,4 +1,4 @@
-package com.ngondrotracker.server.common.configuration;
+package com.ngondrotracker.server.common.configuration.security;
 
 import com.ngondrotracker.server.common.configuration.authentication.AuthenticationTokenFilter;
 import com.ngondrotracker.server.common.configuration.authentication.CustomAuthenticationEntryPoint;

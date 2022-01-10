@@ -7,13 +7,12 @@ import com.ngondrotracker.server.user.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository repository;
 
+    @Override
     public boolean exists(String email) {
         return repository.findByEmail(email).isPresent();
     }

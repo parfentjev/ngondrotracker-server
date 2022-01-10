@@ -1,7 +1,8 @@
-package com.ngondrotracker.server.service;
+package com.ngondrotracker.server.service.user;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.ngondrotracker.server.service.AbstractServiceTest;
 import com.ngondrotracker.server.user.model.UserTokenDto;
 import com.ngondrotracker.server.user.service.UserTokenServiceImpl;
 import org.junit.jupiter.api.Assertions;
