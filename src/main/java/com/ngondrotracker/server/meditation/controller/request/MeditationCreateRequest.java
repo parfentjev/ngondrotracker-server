@@ -1,21 +1,17 @@
-package com.ngondrotracker.server.meditation.model;
+package com.ngondrotracker.server.meditation.controller.request;
 
-public class MeditationDto {
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+public class MeditationCreateRequest {
+    @NotBlank
     private String title;
 
+    @NotBlank
     private String path;
 
+    @NotNull
     private Integer goal;
-
-    public MeditationDto() {
-        // blank constructor
-    }
-
-    public MeditationDto(String title, String path, Integer goal) {
-        this.title = title;
-        this.path = path;
-        this.goal = goal;
-    }
 
     public String getTitle() {
         return title;

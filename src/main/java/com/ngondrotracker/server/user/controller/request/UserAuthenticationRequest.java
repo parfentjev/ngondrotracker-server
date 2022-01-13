@@ -3,7 +3,7 @@ package com.ngondrotracker.server.user.controller.request;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-public class AuthenticationRequest {
+public class UserAuthenticationRequest {
     @NotBlank
     @Size(min = 3, max = 64)
     private String email;

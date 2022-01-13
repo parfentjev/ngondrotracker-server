@@ -7,7 +7,6 @@ import com.ngondrotracker.server.user.service.interfaces.UserTokenService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -19,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -43,10 +43,10 @@ public class UserControllerTest extends AbstractControllerTest {
     @Test
     @DisplayName("POST /user/signup success")
     public void signUpSuccess() throws Exception {
-        Mockito.when(authenticationService.signup(any(), any()))
+        when(authenticationService.signup(any(), any()))
                 .thenReturn(new UserTokenDto("generatedToken", 123L));
 
-        Mockito.when(userDetailsService.loadUserByUsername(any()))
+        when(userDetailsService.loadUserByUsername(any()))
                 .thenReturn(User.withUsername("tester").password("tester").roles("TESTER").build());
 
         MockHttpServletRequestBuilder request = post("/user/signup")
@@ -64,10 +64,10 @@ public class UserControllerTest extends AbstractControllerTest {
     @Test
     @DisplayName("POST /user/signin success")
     public void signInSuccess() throws Exception {
-        Mockito.when(authenticationService.signin(any(), any()))
+        when(authenticationService.signin(any(), any()))
                 .thenReturn(new UserTokenDto("generatedToken", 123L));
 
-        Mockito.when(userDetailsService.loadUserByUsername(any()))
+        when(userDetailsService.loadUserByUsername(any()))
                 .thenReturn(User.withUsername("tester").password("tester").roles("TESTER").build());
 
         MockHttpServletRequestBuilder request = post("/user/signin")
@@ -85,7 +85,7 @@ public class UserControllerTest extends AbstractControllerTest {
     @Test
     @DisplayName("POST /user/signup user already exists")
     public void signInUserAlreadyExists() throws Exception {
-        Mockito.when(authenticationService.signup(any(), any()))
+        when(authenticationService.signup(any(), any()))
                 .thenThrow(new ItemAlreadyExistsException());
 
         MockHttpServletRequestBuilder request = post("/user/signup")
@@ -121,13 +121,13 @@ public class UserControllerTest extends AbstractControllerTest {
     @Test
     @DisplayName("GET /user/refreshToken positive")
     public void refreshToken() throws Exception {
-        Mockito.when(tokenService.refreshToken(any()))
+        when(tokenService.refreshToken(any()))
                 .thenReturn(new UserTokenDto("generatedToken", 123L));
 
-        Mockito.when(tokenService.isValid(any()))
+        when(tokenService.isValid(any()))
                 .thenReturn(true);
 
-        Mockito.when(userDetailsService.loadUserByUsername(any()))
+        when(userDetailsService.loadUserByUsername(any()))
                 .thenReturn(User.withUsername("username").password("password").roles("NOT_VERIFIED").build());
 
         MockHttpServletRequestBuilder request = get("/user/refreshToken")
@@ -144,13 +144,13 @@ public class UserControllerTest extends AbstractControllerTest {
     @Test
     @DisplayName("GET /user/refreshToken has no roles")
     public void refreshTokenNoRoles() throws Exception {
-        Mockito.when(tokenService.refreshToken(any()))
+        when(tokenService.refreshToken(any()))
                 .thenReturn(new UserTokenDto("generatedToken", 123L));
 
-        Mockito.when(tokenService.isValid(any()))
+        when(tokenService.isValid(any()))
                 .thenReturn(true);
 
-        Mockito.when(userDetailsService.loadUserByUsername(any()))
+        when(userDetailsService.loadUserByUsername(any()))
                 .thenReturn(User.withUsername("username").password("password").roles().build());
 
         MockHttpServletRequestBuilder request = get("/user/refreshToken")

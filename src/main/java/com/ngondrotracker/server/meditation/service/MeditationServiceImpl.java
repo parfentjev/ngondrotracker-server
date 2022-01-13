@@ -32,7 +32,7 @@ public class MeditationServiceImpl implements MeditationService {
     }
 
     @Override
-    public MeditationDto getByPath(String path) {
+    public MeditationDto getByPath(String path) throws ItemDoesNotExist {
         Meditation meditation = repository.findByPath(path).orElseThrow(ItemDoesNotExist::new);
 
         return meditationMapper().meditationToDto(meditation);

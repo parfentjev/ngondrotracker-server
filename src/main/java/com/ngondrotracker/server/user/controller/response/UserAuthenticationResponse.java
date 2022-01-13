@@ -2,12 +2,12 @@ package com.ngondrotracker.server.user.controller.response;
 
 import com.ngondrotracker.server.user.model.UserTokenDto;
 
-public class AuthenticationResponse {
+public class UserAuthenticationResponse {
     private final String token;
     private final Long expirationDate;
     private final String roles;
 
-    public AuthenticationResponse(UserTokenDto token, String role) {
+    public UserAuthenticationResponse(UserTokenDto token, String role) {
         this.token = token.getToken();
         this.expirationDate = token.getExpirationDate();
         this.roles = role;
