@@ -6,6 +6,7 @@ import com.ngondrotracker.token.service.TokenService;
 import com.ngondrotracker.user.service.UserAuthenticationService;
 import com.ngondrotracker.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@ComponentScan(basePackages = {"com.ngondrotracker.application"})
 public class UserAuthenticationServiceImpl implements UserAuthenticationService {
     @Autowired
     private PasswordEncoder passwordEncoder;

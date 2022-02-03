@@ -8,7 +8,9 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.ngondrotracker.token.ds.TokenDto;
 import com.ngondrotracker.token.service.TokenService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TokenServiceImpl implements TokenService {
     @Value("${token.lifespan}")
     private Long lifespan;
