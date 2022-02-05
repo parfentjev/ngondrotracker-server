@@ -1,7 +1,7 @@
 package com.ngondrotracker.user.service.impl;
 
 import com.ngondrotracker.common.exception.ItemAlreadyExistsException;
-import com.ngondrotracker.token.ds.TokenDto;
+import com.ngondrotracker.token.dto.TokenDto;
 import com.ngondrotracker.token.service.TokenService;
 import com.ngondrotracker.user.service.UserAuthenticationService;
 import com.ngondrotracker.user.service.UserService;

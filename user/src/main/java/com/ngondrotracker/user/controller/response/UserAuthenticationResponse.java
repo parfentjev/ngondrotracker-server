@@ -1,6 +1,6 @@
 package com.ngondrotracker.user.controller.response;
 
-import com.ngondrotracker.token.ds.TokenDto;
+import com.ngondrotracker.token.dto.TokenDto;
 
 public class UserAuthenticationResponse {
     private final String token;

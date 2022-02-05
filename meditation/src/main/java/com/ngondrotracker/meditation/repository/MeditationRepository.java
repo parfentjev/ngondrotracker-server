@@ -1,6 +1,6 @@
 package com.ngondrotracker.meditation.repository;
 
-import com.ngondrotracker.meditation.ds.Meditation;
+import com.ngondrotracker.meditation.entity.Meditation;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

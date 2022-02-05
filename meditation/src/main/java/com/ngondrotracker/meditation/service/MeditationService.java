@@ -2,7 +2,7 @@ package com.ngondrotracker.meditation.service;
 
 import com.ngondrotracker.common.exception.ItemAlreadyExistsException;
 import com.ngondrotracker.common.exception.ItemDoesNotExist;
-import com.ngondrotracker.meditation.ds.MeditationDto;
+import com.ngondrotracker.meditation.dto.MeditationDto;
 
 import java.util.List;
 

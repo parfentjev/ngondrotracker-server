@@ -1,7 +1,7 @@
 package com.ngondrotracker.user.service.impl;
 
 import com.ngondrotracker.user.enums.UserRole;
-import com.ngondrotracker.user.ds.User;
+import com.ngondrotracker.user.entity.User;
 import com.ngondrotracker.user.repository.UserRepository;
 import com.ngondrotracker.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

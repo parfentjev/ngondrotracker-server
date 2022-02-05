@@ -1,6 +1,6 @@
 package com.ngondrotracker.common.response;
 
-import com.ngondrotracker.common.support.factory.BasicResponseFactory;
+import com.ngondrotracker.common.util.factory.BasicResponseFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

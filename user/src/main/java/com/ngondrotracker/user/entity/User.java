@@ -1,4 +1,4 @@
-package com.ngondrotracker.user.ds;
+package com.ngondrotracker.user.entity;
 
 import com.ngondrotracker.user.enums.UserRole;
 

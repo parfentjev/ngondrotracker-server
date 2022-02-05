@@ -1,0 +1,2 @@
+src/main/resources/liquibase/liquibase-dev.properties
+src/main/resources/liquibase/liquibase-release.properties

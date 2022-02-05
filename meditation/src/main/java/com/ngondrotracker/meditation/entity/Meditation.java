@@ -1,4 +1,4 @@
-package com.ngondrotracker.meditation.ds;
+package com.ngondrotracker.meditation.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

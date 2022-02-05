@@ -1,6 +1,6 @@
 package com.ngondrotracker.user.repository;
 
-import com.ngondrotracker.user.ds.User;
+import com.ngondrotracker.user.entity.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

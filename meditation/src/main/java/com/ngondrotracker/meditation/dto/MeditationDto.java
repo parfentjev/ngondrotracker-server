@@ -1,4 +1,4 @@
-package com.ngondrotracker.meditation.ds;
+package com.ngondrotracker.meditation.dto;
 
 public class MeditationDto {
     private String title;

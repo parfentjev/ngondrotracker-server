@@ -5,7 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.ngondrotracker.token.ds.TokenDto;
+import com.ngondrotracker.token.dto.TokenDto;
 import com.ngondrotracker.token.service.TokenService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

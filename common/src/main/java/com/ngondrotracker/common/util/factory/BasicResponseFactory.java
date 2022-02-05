@@ -1,7 +1,7 @@
-package com.ngondrotracker.common.support.factory;
+package com.ngondrotracker.common.util.factory;
 
 import com.ngondrotracker.common.response.BasicResponse;
-import com.ngondrotracker.common.support.builder.BasicResponseBuilder;
+import com.ngondrotracker.common.util.builder.BasicResponseBuilder;
 
 public class BasicResponseFactory {
     public BasicResponse successful() {

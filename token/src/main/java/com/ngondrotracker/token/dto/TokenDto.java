@@ -1,4 +1,4 @@
-package com.ngondrotracker.token.ds;
+package com.ngondrotracker.token.dto;
 
 public class TokenDto {
     private String token;

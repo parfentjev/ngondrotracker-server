@@ -1,6 +1,6 @@
 package com.ngondrotracker.token.service;
 
-import com.ngondrotracker.token.ds.TokenDto;
+import com.ngondrotracker.token.dto.TokenDto;
 
 public interface TokenService {
     TokenDto generateToken(String username);

@@ -1,4 +1,4 @@
-package com.ngondrotracker.common.support.builder;
+package com.ngondrotracker.common.util.builder;
 
 import com.ngondrotracker.common.response.BasicResponse;
 

@@ -2,8 +2,8 @@ package com.ngondrotracker.meditation.service.impl;
 
 import com.ngondrotracker.common.exception.ItemAlreadyExistsException;
 import com.ngondrotracker.common.exception.ItemDoesNotExist;
-import com.ngondrotracker.meditation.ds.Meditation;
-import com.ngondrotracker.meditation.ds.MeditationDto;
+import com.ngondrotracker.meditation.entity.Meditation;
+import com.ngondrotracker.meditation.dto.MeditationDto;
 import com.ngondrotracker.meditation.repository.MeditationRepository;
 import com.ngondrotracker.meditation.service.MeditationService;
 import org.springframework.beans.factory.annotation.Autowired;
