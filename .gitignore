@@ -13,3 +13,8 @@ target/
 *.rar
 
 hs_err_pid*
+
+application/src/main/resources/application-dev.properties
+application/src/main/resources/application.properties
+
+token/src/main/resources/token-dev.properties
