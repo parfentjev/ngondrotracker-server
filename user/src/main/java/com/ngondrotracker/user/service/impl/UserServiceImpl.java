@@ -7,23 +7,27 @@ import com.ngondrotracker.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository repository;
 
     @Override
-    public boolean exists(String email) {
-        return repository.findByEmail(email).isPresent();
+    public Optional<User> findUserByEmail(String email) {
+        return repository.findByEmail(email);
     }
 
     @Override
-    public void create(String email, String password) {
+    public User create(String email, String password) {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
         user.setRole(UserRole.NOT_VERIFIED);
 
         repository.save(user);
+
+        return user;
     }
 }

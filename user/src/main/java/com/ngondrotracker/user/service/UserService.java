@@ -1,7 +1,11 @@
 package com.ngondrotracker.user.service;
 
-public interface UserService {
-    boolean exists(String username);
+import com.ngondrotracker.user.entity.User;
 
-    void create(String username, String password);
+import java.util.Optional;
+
+public interface UserService {
+    Optional<User> findUserByEmail(String username);
+
+    User create(String username, String password);
 }

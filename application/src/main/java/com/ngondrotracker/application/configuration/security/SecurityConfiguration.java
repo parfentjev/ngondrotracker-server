@@ -1,7 +1,6 @@
 package com.ngondrotracker.application.configuration.security;
 
 import com.ngondrotracker.application.configuration.authentication.AuthenticationTokenFilter;
-import com.ngondrotracker.application.configuration.authentication.CustomAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -26,13 +26,13 @@ import javax.annotation.Resource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private final String[] allowedUnauthorizedEndpoints = {"/signup", "/signin"};
+    private final String[] allowedUnauthorizedEndpoints = {"/user/signup", "/user/signin"};
 
     @Resource
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private CustomAuthenticationEntryPoint unauthorizedHandler;
+    private AuthenticationEntryPoint unauthorizedHandler;
 
     @Bean
     @Override
@@ -72,8 +72,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         security.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/**").permitAll()
-                .anyRequest().authenticated();
+                .authorizeRequests().antMatchers("/**").permitAll().anyRequest().authenticated();
 
         security.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
