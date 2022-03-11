@@ -31,9 +31,6 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 
     @Override
     public TokenDto signup(String username, String password) throws ItemAlreadyExistsException {
-        if (userService.findUserByEmail(username).isPresent())
-            throw new ItemAlreadyExistsException();
-
         userService.create(username, passwordEncoder.encode(password));
 
         return authenticate(username, password);

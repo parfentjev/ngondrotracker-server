@@ -47,7 +47,7 @@ public class MeditationController extends AbstractRestController {
 
     @GetMapping(path = "/getAll", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultResponse<List<MeditationDto>>> getAll() {
-        List<MeditationDto> meditations = meditationService.getAll();
+        List<MeditationDto> meditations = meditationService.findAll();
         ResultResponse<List<MeditationDto>> response = new ResultResponseFactory<List<MeditationDto>>().successful(meditations);
 
         return new ResponseEntity<>(response, HttpStatus.OK);

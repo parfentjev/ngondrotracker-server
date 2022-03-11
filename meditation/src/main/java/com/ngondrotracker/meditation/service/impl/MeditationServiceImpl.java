@@ -20,7 +20,7 @@ public class MeditationServiceImpl implements MeditationService {
     private MeditationRepository repository;
 
     @Override
-    public void create(String title, String path, int goal) throws ItemAlreadyExistsException {
+    public MeditationDto create(String title, String path, int goal) throws ItemAlreadyExistsException {
         if (repository.findByPath(path).isPresent())
             throw new ItemAlreadyExistsException();
 
@@ -30,6 +30,8 @@ public class MeditationServiceImpl implements MeditationService {
         meditation.setGoal(goal);
 
         repository.save(meditation);
+
+        return meditationMapper().entityToDto(meditation);
     }
 
     @Override
@@ -40,7 +42,7 @@ public class MeditationServiceImpl implements MeditationService {
     }
 
     @Override
-    public List<MeditationDto> getAll() {
+    public List<MeditationDto> findAll() {
         return repository.findAll()
                 .stream()
                 .map(meditation -> meditationMapper().entityToDto(meditation))

@@ -1,12 +1,9 @@
 package com.ngondrotracker.user.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ngondrotracker.common.exception.ItemAlreadyExistsException;
 import com.ngondrotracker.token.dto.TokenDto;
 import com.ngondrotracker.token.service.TokenService;
-import com.ngondrotracker.user.repository.UserRepository;
 import com.ngondrotracker.user.service.UserAuthenticationService;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,6 +21,8 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 import java.util.Map;
 
+import static com.ngondrotracker.common.util.mapper.TestUtils.jsonMapper;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -34,7 +33,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(UserController.class)
-
 public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -48,22 +46,11 @@ public class UserControllerTest {
     @MockBean
     private UserDetailsService userDetailsService;
 
-    @MockBean
-    private UserRepository userRepository;
-
     @InjectMocks
     private UserController userController;
 
     private final String email = "tester-name";
     private final String password = "tester-password";
-
-    private String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Test
     @WithAnonymousUser
@@ -77,14 +64,14 @@ public class UserControllerTest {
         MockHttpServletRequestBuilder request = post("/user/signup")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(Map.of("email", email, "password", password)));
+                .content(jsonMapper().mapToJsonString(Map.of("email", email, "password", password)));
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("success", Matchers.is(true)))
-                .andExpect(jsonPath("result.token", Matchers.is("generatedToken")))
-                .andExpect(jsonPath("result.expirationDate", Matchers.is(123)))
-                .andExpect(jsonPath("result.roles", Matchers.is("ROLE_TESTER")));
+                .andExpect(jsonPath("success", is(true)))
+                .andExpect(jsonPath("result.token", is("generatedToken")))
+                .andExpect(jsonPath("result.expirationDate", is(123)))
+                .andExpect(jsonPath("result.roles", is("ROLE_TESTER")));
     }
 
     @Test
@@ -99,14 +86,14 @@ public class UserControllerTest {
         MockHttpServletRequestBuilder request = post("/user/signin")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(Map.of("email", email, "password", password)));
+                .content(jsonMapper().mapToJsonString(Map.of("email", email, "password", password)));
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("success", Matchers.is(true)))
-                .andExpect(jsonPath("result.token", Matchers.is("generatedToken")))
-                .andExpect(jsonPath("result.expirationDate", Matchers.is(123)))
-                .andExpect(jsonPath("result.roles", Matchers.is("ROLE_TESTER")));
+                .andExpect(jsonPath("success", is(true)))
+                .andExpect(jsonPath("result.token", is("generatedToken")))
+                .andExpect(jsonPath("result.expirationDate", is(123)))
+                .andExpect(jsonPath("result.roles", is("ROLE_TESTER")));
     }
 
     @Test
@@ -118,12 +105,12 @@ public class UserControllerTest {
         MockHttpServletRequestBuilder request = post("/user/signup")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(Map.of("email", email, "password", password)));
+                .content(jsonMapper().mapToJsonString(Map.of("email", email, "password", password)));
 
         mockMvc.perform(request)
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("success", Matchers.is(false)))
-                .andExpect(jsonPath("message", Matchers.is("ALREADY_EXISTS")));
+                .andExpect(jsonPath("success", is(false)))
+                .andExpect(jsonPath("message", is("ALREADY_EXISTS")));
     }
 
     @Test
@@ -132,7 +119,7 @@ public class UserControllerTest {
         MockHttpServletRequestBuilder request = post("/user/signup")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(Map.of("email", "", "password", password)));
+                .content(jsonMapper().mapToJsonString(Map.of("email", "", "password", password)));
 
         mockMvc.perform(request).andExpect(status().is4xxClientError());
     }
@@ -143,13 +130,13 @@ public class UserControllerTest {
         MockHttpServletRequestBuilder request = post("/user/signup")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(Map.of("email", email, "password", "")));
+                .content(jsonMapper().mapToJsonString(Map.of("email", email, "password", "")));
 
         mockMvc.perform(request).andExpect(status().is4xxClientError());
     }
 
     @Test
-    @WithMockUser(username = "username", password = "password", roles = "NOT_VERIFIED")
+    @WithMockUser(username = "username", roles = "NOT_VERIFIED")
     public void refreshToken() throws Exception {
         when(tokenService.refreshToken(any()))
                 .thenReturn(new TokenDto("generatedToken", 123L));
@@ -164,9 +151,9 @@ public class UserControllerTest {
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("success", Matchers.is(true)))
-                .andExpect(jsonPath("result.token", Matchers.is("generatedToken")))
-                .andExpect(jsonPath("result.expirationDate", Matchers.is(123)));
+                .andExpect(jsonPath("success", is(true)))
+                .andExpect(jsonPath("result.token", is("generatedToken")))
+                .andExpect(jsonPath("result.expirationDate", is(123)));
     }
 
     @Test
