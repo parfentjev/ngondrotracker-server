@@ -58,7 +58,7 @@ public class MeditationController extends AbstractRestController {
         ResultResponse<MeditationDto> response;
 
         try {
-            MeditationDto meditationDto = meditationService.getByPath(request.getId());
+            MeditationDto meditationDto = meditationService.getByPath(request.getPath());
 
             response = new ResultResponseFactory<MeditationDto>().successful(meditationDto);
         } catch (ItemDoesNotExist e) {

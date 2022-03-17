@@ -4,13 +4,13 @@ import javax.validation.constraints.NotBlank;
 
 public class MeditationGetRequest {
     @NotBlank
-    private String id;
+    private String path;
 
-    public String getId() {
-        return id;
+    public String getPath() {
+        return path;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPath(String path) {
+        this.path = path;
     }
 }
