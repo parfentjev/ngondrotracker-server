@@ -54,7 +54,7 @@ public class MeditationControllerTest {
                 .content(jsonMapper().mapToJsonString(Map.of("title", title, "path", path, "goal", goal)));
 
         mockMvc.perform(request)
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("success", is(true)));
     }
 

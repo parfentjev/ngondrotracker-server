@@ -67,7 +67,7 @@ public class UserControllerTest {
                 .content(jsonMapper().mapToJsonString(Map.of("email", email, "password", password)));
 
         mockMvc.perform(request)
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("success", is(true)))
                 .andExpect(jsonPath("result.token", is("generatedToken")))
                 .andExpect(jsonPath("result.expirationDate", is(123)))

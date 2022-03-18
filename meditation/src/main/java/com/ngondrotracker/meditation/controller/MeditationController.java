@@ -40,7 +40,7 @@ public class MeditationController extends AbstractRestController {
             response = new BasicResponseFactory().notSuccessful(e.getMessage());
         }
 
-        HttpStatus status = response.isSuccess() ? HttpStatus.OK : HttpStatus.CONFLICT;
+        HttpStatus status = response.isSuccess() ? HttpStatus.CREATED : HttpStatus.CONFLICT;
 
         return new ResponseEntity<>(response, status);
     }

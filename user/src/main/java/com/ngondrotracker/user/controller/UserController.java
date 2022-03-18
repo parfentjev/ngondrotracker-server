@@ -52,7 +52,7 @@ public class UserController extends AbstractRestController {
             response = new ResultResponseFactory<UserAuthenticationResponse>().notSuccessful(e.getMessage());
         }
 
-        HttpStatus status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        HttpStatus status = response.isSuccess() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST;
 
         return new ResponseEntity<>(response, status);
     }
