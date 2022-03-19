@@ -23,7 +23,6 @@ import java.util.Map;
 import static com.ngondrotracker.common.util.mapper.TestUtils.jsonMapper;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -48,8 +47,7 @@ public class MeditationControllerTest {
 
         when(meditationService.create(title, path, intGoal)).thenReturn(new MeditationDto(title, path, intGoal));
 
-        MockHttpServletRequestBuilder request = post("/meditation/create")
-                .with(csrf())
+        MockHttpServletRequestBuilder request = post("/meditations/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMapper().mapToJsonString(Map.of("title", title, "path", path, "goal", goal)));
 
@@ -68,8 +66,7 @@ public class MeditationControllerTest {
 
         when(meditationService.create(title, path, intGoal)).thenThrow(new ItemAlreadyExistsException());
 
-        MockHttpServletRequestBuilder request = post("/meditation/create")
-                .with(csrf())
+        MockHttpServletRequestBuilder request = post("/meditations/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMapper().mapToJsonString(Map.of("title", title, "path", path, "goal", goal)));
 
@@ -82,8 +79,7 @@ public class MeditationControllerTest {
     @Test
     @WithMockUser(username = "username", roles = "USER")
     public void createMeditationUser() throws Exception {
-        MockHttpServletRequestBuilder request = post("/meditation/create")
-                .with(csrf())
+        MockHttpServletRequestBuilder request = post("/meditations/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMapper().mapToJsonString(Map.of("title", "title", "path", "path", "goal", "goal")));
 
@@ -94,8 +90,7 @@ public class MeditationControllerTest {
     @Test
     @WithMockUser(username = "username", roles = "NOT_VERIFIED")
     public void createMeditationNotVerified() throws Exception {
-        MockHttpServletRequestBuilder request = post("/meditation/create")
-                .with(csrf())
+        MockHttpServletRequestBuilder request = post("/meditations/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMapper().mapToJsonString(Map.of("title", "title", "path", "path", "goal", "goal")));
 
@@ -106,8 +101,7 @@ public class MeditationControllerTest {
     @Test
     @WithAnonymousUser
     public void createMeditationAnonymous() throws Exception {
-        MockHttpServletRequestBuilder request = post("/meditation/create")
-                .with(csrf())
+        MockHttpServletRequestBuilder request = post("/meditations/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMapper().mapToJsonString(Map.of("title", "title", "path", "path", "goal", "goal")));
 
@@ -124,10 +118,7 @@ public class MeditationControllerTest {
 
         when(meditationService.getByPath(path)).thenReturn(new MeditationDto(title, path, intGoal));
 
-        MockHttpServletRequestBuilder request = get("/meditation/get")
-                .with(csrf())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonMapper().mapToJsonString(Map.of("path", path)));
+        MockHttpServletRequestBuilder request = get("/meditations/" + path);
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
@@ -143,10 +134,7 @@ public class MeditationControllerTest {
 
         when(meditationService.getByPath(path)).thenThrow(new ItemDoesNotExist());
 
-        MockHttpServletRequestBuilder request = get("/meditation/get")
-                .with(csrf())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonMapper().mapToJsonString(Map.of("path", path)));
+        MockHttpServletRequestBuilder request = get("/meditations/" + path);
 
         mockMvc.perform(request)
                 .andExpect(status().is4xxClientError())
@@ -155,15 +143,13 @@ public class MeditationControllerTest {
 
     @Test
     @WithAnonymousUser
-    public void getAll() throws Exception {
+    public void getMeditations() throws Exception {
         MeditationDto meditationDto1 = new MeditationDto("m1", "p1", 1);
         MeditationDto meditationDto2 = new MeditationDto("m2", "p2", 2);
 
         when(meditationService.findAll()).thenReturn(Arrays.asList(meditationDto1, meditationDto2));
 
-        MockHttpServletRequestBuilder request = get("/meditation/getAll")
-                .with(csrf())
-                .contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder request = get("/meditations/");
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
@@ -178,12 +164,10 @@ public class MeditationControllerTest {
 
     @Test
     @WithAnonymousUser
-    public void getAllEmpty() throws Exception {
+    public void getMeditationsEmptyList() throws Exception {
         when(meditationService.findAll()).thenReturn(Lists.emptyList());
 
-        MockHttpServletRequestBuilder request = get("/meditation/getAll")
-                .with(csrf())
-                .contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder request = get("/meditations/");
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())

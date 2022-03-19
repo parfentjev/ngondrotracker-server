@@ -8,7 +8,6 @@ import com.ngondrotracker.common.response.ResultResponse;
 import com.ngondrotracker.common.util.factory.BasicResponseFactory;
 import com.ngondrotracker.common.util.factory.ResultResponseFactory;
 import com.ngondrotracker.meditation.controller.request.MeditationCreateRequest;
-import com.ngondrotracker.meditation.controller.request.MeditationGetRequest;
 import com.ngondrotracker.meditation.dto.MeditationDto;
 import com.ngondrotracker.meditation.service.MeditationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +22,14 @@ import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("/meditation")
+@RequestMapping("/meditations")
 public class MeditationController extends AbstractRestController {
     @Autowired
     private MeditationService meditationService;
 
-    @PostMapping(path = "/create", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @PreAuthorize(ADMIN_ROLE)
-    public ResponseEntity<BasicResponse> create(@RequestBody @Valid MeditationCreateRequest request) {
+    public ResponseEntity<BasicResponse> createMeditation(@RequestBody @Valid MeditationCreateRequest request) {
         BasicResponse response;
 
         try {
@@ -45,20 +44,20 @@ public class MeditationController extends AbstractRestController {
         return new ResponseEntity<>(response, status);
     }
 
-    @GetMapping(path = "/getAll", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResultResponse<List<MeditationDto>>> getAll() {
+    @GetMapping(path = "/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResultResponse<List<MeditationDto>>> getMeditations() {
         List<MeditationDto> meditations = meditationService.findAll();
         ResultResponse<List<MeditationDto>> response = new ResultResponseFactory<List<MeditationDto>>().successful(meditations);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/get", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResultResponse<MeditationDto>> get(@RequestBody @Valid MeditationGetRequest request) {
+    @GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResultResponse<MeditationDto>> getMeditationByPath(@PathVariable(name = "id") String path) {
         ResultResponse<MeditationDto> response;
 
         try {
-            MeditationDto meditationDto = meditationService.getByPath(request.getPath());
+            MeditationDto meditationDto = meditationService.getByPath(path);
 
             response = new ResultResponseFactory<MeditationDto>().successful(meditationDto);
         } catch (ItemDoesNotExist e) {
