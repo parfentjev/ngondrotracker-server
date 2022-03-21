@@ -1,24 +1,19 @@
 package com.ngondrotracker.common.response;
 
 import com.ngondrotracker.common.util.factory.BasicResponseFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.nio.file.AccessDeniedException;
 
-@ControllerAdvice
-@RestController
-public class BasicResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+@RestControllerAdvice
+public class ResponseEntityExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<BasicResponse> exceptionHandler(Exception exception) {
-        BasicResponse response = new BasicResponseFactory().notSuccessful(exception.getMessage());
+        BasicResponse response = new BasicResponseFactory().notSuccessful("UNKNOWN_ERROR");
 
         HttpStatus httpStatus;
         if (exception.getClass() == AccessDeniedException.class) {
@@ -30,8 +25,8 @@ public class BasicResponseEntityExceptionHandler extends ResponseEntityException
         return new ResponseEntity<>(response, httpStatus);
     }
 
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity<BasicResponse> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         BasicResponse response = new BasicResponseFactory().notSuccessful("VALIDATION_ERROR");
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

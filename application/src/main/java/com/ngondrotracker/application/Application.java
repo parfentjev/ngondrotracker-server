@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.ngondrotracker.user", "com.ngondrotracker.token"})
+@ComponentScan(basePackages = {"com.ngondrotracker.user", "com.ngondrotracker.token", "com.ngondrotracker.common"})
 @EnableJpaRepositories(basePackages = {"com.ngondrotracker.user.repository"})
 @EntityScan(basePackages = {"com.ngondrotracker.user.entity"})
 public class Application {

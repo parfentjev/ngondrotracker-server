@@ -1,7 +1,9 @@
 package com.ngondrotracker.user.controller.response;
 
 import com.ngondrotracker.token.dto.TokenDto;
+import lombok.Data;
 
+@Data
 public class UserAuthenticationResponse {
     private final String token;
     private final Long expirationDate;
@@ -11,18 +13,5 @@ public class UserAuthenticationResponse {
         this.token = token.getToken();
         this.expirationDate = token.getExpirationDate();
         this.roles = role;
-    }
-
-
-    public String getToken() {
-        return token;
-    }
-
-    public Long getExpirationDate() {
-        return expirationDate;
-    }
-
-    public String getRoles() {
-        return roles;
     }
 }
