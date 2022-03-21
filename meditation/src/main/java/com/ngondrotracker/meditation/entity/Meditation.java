@@ -1,38 +1,21 @@
 package com.ngondrotracker.meditation.entity;
 
+import lombok.Data;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+@Data
 @Entity
 public class Meditation {
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Id
+    @Column(name = "path", nullable = false)
     private String path;
 
+    @Column(name = "goal", nullable = false)
     private Integer goal;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public Integer getGoal() {
-        return goal;
-    }
-
-    public void setGoal(Integer goal) {
-        this.goal = goal;
-    }
 }
