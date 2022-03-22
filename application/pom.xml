@@ -14,6 +14,12 @@
         <!-- ngondrotracker -->
         <dependency>
             <groupId>com.ngondrotracker</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ngondrotracker</groupId>
             <artifactId>token</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
@@ -26,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>com.ngondrotracker</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>meditation</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

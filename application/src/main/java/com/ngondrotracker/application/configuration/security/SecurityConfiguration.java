@@ -26,8 +26,6 @@ import javax.annotation.Resource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private final String[] allowedUnauthorizedEndpoints = {"/user/signup", "/user/signin"};
-
     @Resource
     private UserDetailsService userDetailsService;
 
