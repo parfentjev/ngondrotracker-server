@@ -10,6 +10,7 @@ public class MeditationMapper {
         meditationDto.setTitle(meditation.getTitle());
         meditationDto.setPath(meditation.getPath());
         meditationDto.setGoal(meditation.getGoal());
+        meditationDto.setOrder(meditation.getOrder());
 
         return meditationDto;
     }
@@ -19,6 +20,7 @@ public class MeditationMapper {
         meditation.setTitle(meditationDto.getTitle());
         meditation.setPath(meditationDto.getPath());
         meditation.setGoal(meditationDto.getGoal());
+        meditation.setOrder(meditationDto.getOrder());
 
         return meditation;
     }
@@ -28,6 +30,7 @@ public class MeditationMapper {
         meditationDto.setTitle(request.getTitle());
         meditationDto.setPath(request.getPath());
         meditationDto.setGoal(request.getGoal());
+        meditationDto.setOrder(request.getOrder());
 
         return meditationDto;
     }

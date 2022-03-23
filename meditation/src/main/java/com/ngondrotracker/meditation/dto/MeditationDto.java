@@ -9,4 +9,6 @@ public class MeditationDto {
     private String path;
 
     private Integer goal;
+
+    private Integer order;
 }

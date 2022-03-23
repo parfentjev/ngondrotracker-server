@@ -42,26 +42,30 @@ public class MeditationControllerTest {
     public void createMeditation() throws Exception {
         String title = "newTitle";
         String path = "newPath";
-        String goal = "111111";
-        int intGoal = 111111;
+        int goal = 111111;
+        int order = 1;
 
         MeditationDto meditationDto = new MeditationDto();
         meditationDto.setTitle(title);
         meditationDto.setPath(path);
-        meditationDto.setGoal(intGoal);
+        meditationDto.setGoal(goal);
+        meditationDto.setOrder(order);
 
         when(meditationService.create(meditationDto)).thenReturn(meditationDto);
 
         MockHttpServletRequestBuilder request = post("/meditations/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonMapper().mapToJsonString(Map.of("title", title, "path", path, "goal", goal)));
+                .content(jsonMapper().mapToJsonString(Map.of("title", title,
+                        "path", path,
+                        "goal", String.valueOf(goal),
+                        "order", String.valueOf(order))));
 
         mockMvc.perform(request)
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("success", is(true)))
                 .andExpect(jsonPath("result.title", is(title)))
                 .andExpect(jsonPath("result.path", is(path)))
-                .andExpect(jsonPath("result.goal", is(intGoal)));
+                .andExpect(jsonPath("result.goal", is(goal)));
     }
 
     @Test
@@ -69,19 +73,23 @@ public class MeditationControllerTest {
     public void createMeditationThatAlreadyExists() throws Exception {
         String title = "newTitle";
         String path = "newPath";
-        String goal = "111111";
-        int intGoal = 111111;
+        int goal = 111111;
+        int order = 1;
 
         MeditationDto meditationDto = new MeditationDto();
         meditationDto.setTitle(title);
         meditationDto.setPath(path);
-        meditationDto.setGoal(intGoal);
+        meditationDto.setGoal(goal);
+        meditationDto.setOrder(order);
 
         when(meditationService.create(meditationDto)).thenThrow(new ResourceAlreadyExistsException("Meditation"));
 
         MockHttpServletRequestBuilder request = post("/meditations/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonMapper().mapToJsonString(Map.of("title", title, "path", path, "goal", goal)));
+                .content(jsonMapper().mapToJsonString(Map.of("title", title,
+                        "path", path,
+                        "goal", String.valueOf(goal),
+                        "order", String.valueOf(order))));
 
         mockMvc.perform(request)
                 .andExpect(status().is4xxClientError())
@@ -94,7 +102,10 @@ public class MeditationControllerTest {
     public void createMeditationUser() throws Exception {
         MockHttpServletRequestBuilder request = post("/meditations/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonMapper().mapToJsonString(Map.of("title", "title", "path", "path", "goal", "1")));
+                .content(jsonMapper().mapToJsonString(Map.of("title", "title",
+                        "path", "path",
+                        "goal", "1",
+                        "order", "1")));
 
         mockMvc.perform(request)
                 .andExpect(status().is4xxClientError())
@@ -107,7 +118,10 @@ public class MeditationControllerTest {
     public void createMeditationNotVerified() throws Exception {
         MockHttpServletRequestBuilder request = post("/meditations/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonMapper().mapToJsonString(Map.of("title", "title", "path", "path", "goal", "1")));
+                .content(jsonMapper().mapToJsonString(Map.of("title", "title",
+                        "path", "path",
+                        "goal", "1",
+                        "order", "1")));
 
         mockMvc.perform(request)
                 .andExpect(status().is4xxClientError())
@@ -120,7 +134,10 @@ public class MeditationControllerTest {
     public void createMeditationAnonymous() throws Exception {
         MockHttpServletRequestBuilder request = post("/meditations/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonMapper().mapToJsonString(Map.of("title", "title", "path", "path", "goal", "1")));
+                .content(jsonMapper().mapToJsonString(Map.of("title", "title",
+                        "path", "path",
+                        "goal", "1",
+                        "order", "1")));
 
         mockMvc.perform(request)
                 .andExpect(status().is4xxClientError())
@@ -130,15 +147,17 @@ public class MeditationControllerTest {
 
     @Test
     @WithAnonymousUser
-    public void getMeditationByMath() throws Exception {
+    public void getMeditationByPath() throws Exception {
         String title = "newTitle";
         String path = "newPath";
-        int intGoal = 111111;
+        int goal = 111111;
+        int order = 1;
 
         MeditationDto meditationDto = new MeditationDto();
         meditationDto.setTitle(title);
         meditationDto.setPath(path);
-        meditationDto.setGoal(intGoal);
+        meditationDto.setGoal(goal);
+        meditationDto.setOrder(order);
 
         when(meditationService.getByPath(path)).thenReturn(meditationDto);
 
@@ -148,7 +167,8 @@ public class MeditationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("result.title", is(title)))
                 .andExpect(jsonPath("result.path", is(path)))
-                .andExpect(jsonPath("result.goal", is(intGoal)));
+                .andExpect(jsonPath("result.goal", is(goal)))
+                .andExpect(jsonPath("result.order", is(order)));
     }
 
     @Test
@@ -174,11 +194,13 @@ public class MeditationControllerTest {
         meditationDto1.setTitle("m1");
         meditationDto1.setPath("p1");
         meditationDto1.setGoal(1);
+        meditationDto1.setOrder(1);
 
         MeditationDto meditationDto2 = new MeditationDto();
         meditationDto2.setTitle("m2");
         meditationDto2.setPath("p2");
         meditationDto2.setGoal(2);
+        meditationDto2.setOrder(2);
 
         when(meditationService.findAll()).thenReturn(Arrays.asList(meditationDto1, meditationDto2));
 
@@ -190,9 +212,11 @@ public class MeditationControllerTest {
                 .andExpect(jsonPath("$.result[0]", hasEntry("title", "m1")))
                 .andExpect(jsonPath("$.result[0]", hasEntry("path", "p1")))
                 .andExpect(jsonPath("$.result[0]", hasEntry("goal", 1)))
+                .andExpect(jsonPath("$.result[0]", hasEntry("order", 1)))
                 .andExpect(jsonPath("$.result[1]", hasEntry("title", "m2")))
                 .andExpect(jsonPath("$.result[1]", hasEntry("path", "p2")))
-                .andExpect(jsonPath("$.result[1]", hasEntry("goal", 2)));
+                .andExpect(jsonPath("$.result[1]", hasEntry("goal", 2)))
+                .andExpect(jsonPath("$.result[1]", hasEntry("order", 2)));
     }
 
     @Test
