@@ -25,12 +25,7 @@ public class MeditationServiceImpl implements MeditationService {
             throw new ResourceAlreadyExistsException("Meditation");
         }
 
-        Meditation meditation = new Meditation();
-        meditation.setTitle(meditationDto.getTitle());
-        meditation.setPath(meditationDto.getPath());
-        meditation.setGoal(meditationDto.getGoal());
-
-        repository.save(meditation);
+        Meditation meditation = repository.save(meditationMapper().dtoToEntity(meditationDto));
 
         return meditationMapper().entityToDto(meditation);
     }
