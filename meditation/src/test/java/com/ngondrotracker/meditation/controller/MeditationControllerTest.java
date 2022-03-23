@@ -45,7 +45,12 @@ public class MeditationControllerTest {
         String goal = "111111";
         int intGoal = 111111;
 
-        when(meditationService.create(title, path, intGoal)).thenReturn(new MeditationDto(title, path, intGoal));
+        MeditationDto meditationDto = new MeditationDto();
+        meditationDto.setTitle(title);
+        meditationDto.setPath(path);
+        meditationDto.setGoal(intGoal);
+
+        when(meditationService.create(meditationDto)).thenReturn(meditationDto);
 
         MockHttpServletRequestBuilder request = post("/meditations/")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -53,7 +58,10 @@ public class MeditationControllerTest {
 
         mockMvc.perform(request)
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("success", is(true)));
+                .andExpect(jsonPath("success", is(true)))
+                .andExpect(jsonPath("result.title", is(title)))
+                .andExpect(jsonPath("result.path", is(path)))
+                .andExpect(jsonPath("result.goal", is(intGoal)));
     }
 
     @Test
@@ -64,7 +72,12 @@ public class MeditationControllerTest {
         String goal = "111111";
         int intGoal = 111111;
 
-        when(meditationService.create(title, path, intGoal)).thenThrow(new ResourceAlreadyExistsException("Meditation"));
+        MeditationDto meditationDto = new MeditationDto();
+        meditationDto.setTitle(title);
+        meditationDto.setPath(path);
+        meditationDto.setGoal(intGoal);
+
+        when(meditationService.create(meditationDto)).thenThrow(new ResourceAlreadyExistsException("Meditation"));
 
         MockHttpServletRequestBuilder request = post("/meditations/")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -122,7 +135,12 @@ public class MeditationControllerTest {
         String path = "newPath";
         int intGoal = 111111;
 
-        when(meditationService.getByPath(path)).thenReturn(new MeditationDto(title, path, intGoal));
+        MeditationDto meditationDto = new MeditationDto();
+        meditationDto.setTitle(title);
+        meditationDto.setPath(path);
+        meditationDto.setGoal(intGoal);
+
+        when(meditationService.getByPath(path)).thenReturn(meditationDto);
 
         MockHttpServletRequestBuilder request = get("/meditations/" + path);
 
@@ -151,8 +169,16 @@ public class MeditationControllerTest {
     @Test
     @WithAnonymousUser
     public void getMeditations() throws Exception {
-        MeditationDto meditationDto1 = new MeditationDto("m1", "p1", 1);
-        MeditationDto meditationDto2 = new MeditationDto("m2", "p2", 2);
+
+        MeditationDto meditationDto1 = new MeditationDto();
+        meditationDto1.setTitle("m1");
+        meditationDto1.setPath("p1");
+        meditationDto1.setGoal(1);
+
+        MeditationDto meditationDto2 = new MeditationDto();
+        meditationDto2.setTitle("m2");
+        meditationDto2.setPath("p2");
+        meditationDto2.setGoal(2);
 
         when(meditationService.findAll()).thenReturn(Arrays.asList(meditationDto1, meditationDto2));
 

@@ -20,13 +20,15 @@ public class MeditationServiceImpl implements MeditationService {
     private MeditationRepository repository;
 
     @Override
-    public MeditationDto create(String title, String path, int goal) {
-        if (repository.findByPath(path).isPresent()) throw new ResourceAlreadyExistsException("Meditation");
+    public MeditationDto create(MeditationDto meditationDto) {
+        if (repository.findByPath(meditationDto.getPath()).isPresent()) {
+            throw new ResourceAlreadyExistsException("Meditation");
+        }
 
         Meditation meditation = new Meditation();
-        meditation.setTitle(title);
-        meditation.setPath(path);
-        meditation.setGoal(goal);
+        meditation.setTitle(meditationDto.getTitle());
+        meditation.setPath(meditationDto.getPath());
+        meditation.setGoal(meditationDto.getGoal());
 
         repository.save(meditation);
 

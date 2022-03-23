@@ -31,21 +31,26 @@ public class MeditationServiceImplTest {
 
     @Test
     public void createMeditation() throws ResourceAlreadyExistsException {
-        String title = "newMeditation";
-        String path = "meditationPath";
-        int goal = 100;
+        String title = "newTitle";
+        String path = "newPath";
+        int intGoal = 111111;
 
-        MeditationDto meditationDto = meditationService.create(title, path, goal);
+        MeditationDto requestDto = new MeditationDto();
+        requestDto.setTitle(title);
+        requestDto.setPath(path);
+        requestDto.setGoal(intGoal);
+
+        MeditationDto meditationDto = meditationService.create(requestDto);
         verify(meditationRepository, times(1)).save(any());
         assertEquals(title, meditationDto.getTitle());
         assertEquals(path, meditationDto.getPath());
-        assertEquals(goal, meditationDto.getGoal());
+        assertEquals(intGoal, meditationDto.getGoal());
     }
 
     @Test
     public void createMeditationThatAlreadyExists() {
         when(meditationRepository.findByPath(any())).thenReturn(Optional.of(new Meditation()));
-        assertThrows(ResourceAlreadyExistsException.class, () -> meditationService.create(null, null, 0));
+        assertThrows(ResourceAlreadyExistsException.class, () -> meditationService.create(new MeditationDto()));
         verify(meditationRepository, times(0)).save((any()));
     }
 

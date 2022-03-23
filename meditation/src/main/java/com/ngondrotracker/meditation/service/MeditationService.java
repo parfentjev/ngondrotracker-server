@@ -6,7 +6,7 @@ import com.ngondrotracker.meditation.dto.MeditationDto;
 import java.util.List;
 
 public interface MeditationService {
-    MeditationDto create(String title, String path, int goal);
+    MeditationDto create(MeditationDto meditationDto);
 
     MeditationDto getByPath(String path) throws ResourceNotFoundException;
 

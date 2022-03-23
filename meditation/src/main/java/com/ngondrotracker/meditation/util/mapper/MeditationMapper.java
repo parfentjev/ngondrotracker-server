@@ -1,10 +1,34 @@
 package com.ngondrotracker.meditation.util.mapper;
 
+import com.ngondrotracker.meditation.controller.request.MeditationCreateRequest;
 import com.ngondrotracker.meditation.entity.Meditation;
 import com.ngondrotracker.meditation.dto.MeditationDto;
 
 public class MeditationMapper {
     public MeditationDto entityToDto(Meditation meditation) {
-        return new MeditationDto(meditation.getTitle(), meditation.getPath(), meditation.getGoal());
+        MeditationDto meditationDto = new MeditationDto();
+        meditationDto.setTitle(meditation.getTitle());
+        meditationDto.setPath(meditation.getPath());
+        meditationDto.setGoal(meditation.getGoal());
+
+        return meditationDto;
+    }
+
+    public Meditation dtoToEntity(MeditationDto meditationDto) {
+        Meditation meditation = new Meditation();
+        meditation.setTitle(meditationDto.getTitle());
+        meditation.setPath(meditationDto.getPath());
+        meditation.setGoal(meditationDto.getGoal());
+
+        return meditation;
+    }
+
+    public MeditationDto createRequestToDto(MeditationCreateRequest request) {
+        MeditationDto meditationDto = new MeditationDto();
+        meditationDto.setTitle(request.getTitle());
+        meditationDto.setPath(request.getPath());
+        meditationDto.setGoal(request.getGoal());
+
+        return meditationDto;
     }
 }
