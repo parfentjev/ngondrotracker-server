@@ -1,7 +1,7 @@
 package com.ngondrotracker.meditation.controller;
 
-import com.ngondrotracker.common.exception.ItemAlreadyExistsException;
-import com.ngondrotracker.common.exception.ItemDoesNotExist;
+import com.ngondrotracker.common.exception.ResourceAlreadyExistsException;
+import com.ngondrotracker.common.exception.ResourceNotFoundException;
 import com.ngondrotracker.meditation.dto.MeditationDto;
 import com.ngondrotracker.meditation.service.MeditationService;
 import org.assertj.core.util.Lists;
@@ -64,7 +64,7 @@ public class MeditationControllerTest {
         String goal = "111111";
         int intGoal = 111111;
 
-        when(meditationService.create(title, path, intGoal)).thenThrow(new ItemAlreadyExistsException());
+        when(meditationService.create(title, path, intGoal)).thenThrow(new ResourceAlreadyExistsException("Meditation"));
 
         MockHttpServletRequestBuilder request = post("/meditations/")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -73,7 +73,7 @@ public class MeditationControllerTest {
         mockMvc.perform(request)
                 .andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("success", is(false)))
-                .andExpect(jsonPath("message", is("ALREADY_EXISTS")));
+                .andExpect(jsonPath("message", is("Meditation already exists")));
     }
 
     @Test
@@ -81,10 +81,12 @@ public class MeditationControllerTest {
     public void createMeditationUser() throws Exception {
         MockHttpServletRequestBuilder request = post("/meditations/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonMapper().mapToJsonString(Map.of("title", "title", "path", "path", "goal", "goal")));
+                .content(jsonMapper().mapToJsonString(Map.of("title", "title", "path", "path", "goal", "1")));
 
         mockMvc.perform(request)
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("success", is(false)))
+                .andExpect(jsonPath("message", is("Access denied")));
     }
 
     @Test
@@ -92,10 +94,12 @@ public class MeditationControllerTest {
     public void createMeditationNotVerified() throws Exception {
         MockHttpServletRequestBuilder request = post("/meditations/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonMapper().mapToJsonString(Map.of("title", "title", "path", "path", "goal", "goal")));
+                .content(jsonMapper().mapToJsonString(Map.of("title", "title", "path", "path", "goal", "1")));
 
         mockMvc.perform(request)
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("success", is(false)))
+                .andExpect(jsonPath("message", is("Access denied")));
     }
 
     @Test
@@ -103,10 +107,12 @@ public class MeditationControllerTest {
     public void createMeditationAnonymous() throws Exception {
         MockHttpServletRequestBuilder request = post("/meditations/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonMapper().mapToJsonString(Map.of("title", "title", "path", "path", "goal", "goal")));
+                .content(jsonMapper().mapToJsonString(Map.of("title", "title", "path", "path", "goal", "1")));
 
         mockMvc.perform(request)
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("success", is(false)))
+                .andExpect(jsonPath("message", is("Access denied")));
     }
 
     @Test
@@ -132,13 +138,14 @@ public class MeditationControllerTest {
     public void getMeditationByMathDoesNotExist() throws Exception {
         String path = "newPath";
 
-        when(meditationService.getByPath(path)).thenThrow(new ItemDoesNotExist());
+        when(meditationService.getByPath(path)).thenThrow(new ResourceNotFoundException("Meditation", "path", "x"));
 
         MockHttpServletRequestBuilder request = get("/meditations/" + path);
 
         mockMvc.perform(request)
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("message", is("DOES_NOT_EXIST")));
+                .andExpect(jsonPath("success", is(false)))
+                .andExpect(jsonPath("message", is("Meditation not found, where path = x")));
     }
 
     @Test

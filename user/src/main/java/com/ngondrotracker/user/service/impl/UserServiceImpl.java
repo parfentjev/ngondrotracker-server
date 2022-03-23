@@ -1,6 +1,6 @@
 package com.ngondrotracker.user.service.impl;
 
-import com.ngondrotracker.common.exception.ItemAlreadyExistsException;
+import com.ngondrotracker.common.exception.ResourceAlreadyExistsException;
 import com.ngondrotracker.user.enums.UserRole;
 import com.ngondrotracker.user.entity.User;
 import com.ngondrotracker.user.repository.UserRepository;
@@ -21,9 +21,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User create(String email, String password) throws ItemAlreadyExistsException {
+    public User create(String email, String password) throws ResourceAlreadyExistsException {
         if (findUserByEmail(email).isPresent())
-            throw new ItemAlreadyExistsException();
+            throw new ResourceAlreadyExistsException("User");
 
         User user = new User();
         user.setEmail(email);

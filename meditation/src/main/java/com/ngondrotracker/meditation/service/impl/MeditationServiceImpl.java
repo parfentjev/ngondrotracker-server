@@ -1,7 +1,7 @@
 package com.ngondrotracker.meditation.service.impl;
 
-import com.ngondrotracker.common.exception.ItemAlreadyExistsException;
-import com.ngondrotracker.common.exception.ItemDoesNotExist;
+import com.ngondrotracker.common.exception.ResourceAlreadyExistsException;
+import com.ngondrotracker.common.exception.ResourceNotFoundException;
 import com.ngondrotracker.meditation.entity.Meditation;
 import com.ngondrotracker.meditation.dto.MeditationDto;
 import com.ngondrotracker.meditation.repository.MeditationRepository;
@@ -20,9 +20,8 @@ public class MeditationServiceImpl implements MeditationService {
     private MeditationRepository repository;
 
     @Override
-    public MeditationDto create(String title, String path, int goal) throws ItemAlreadyExistsException {
-        if (repository.findByPath(path).isPresent())
-            throw new ItemAlreadyExistsException();
+    public MeditationDto create(String title, String path, int goal) {
+        if (repository.findByPath(path).isPresent()) throw new ResourceAlreadyExistsException("Meditation");
 
         Meditation meditation = new Meditation();
         meditation.setTitle(title);
@@ -35,17 +34,14 @@ public class MeditationServiceImpl implements MeditationService {
     }
 
     @Override
-    public MeditationDto getByPath(String path) throws ItemDoesNotExist {
-        Meditation meditation = repository.findByPath(path).orElseThrow(ItemDoesNotExist::new);
+    public MeditationDto getByPath(String path) throws ResourceNotFoundException {
+        Meditation meditation = repository.findByPath(path).orElseThrow(() -> new ResourceNotFoundException("Meditation", "path", path));
 
         return meditationMapper().entityToDto(meditation);
     }
 
     @Override
     public List<MeditationDto> findAll() {
-        return repository.findAll()
-                .stream()
-                .map(meditation -> meditationMapper().entityToDto(meditation))
-                .collect(Collectors.toList());
+        return repository.findAll().stream().map(meditation -> meditationMapper().entityToDto(meditation)).collect(Collectors.toList());
     }
 }

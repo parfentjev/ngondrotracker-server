@@ -1,7 +1,6 @@
 package com.ngondrotracker.user.controller;
 
 import com.ngondrotracker.common.controller.AbstractRestController;
-import com.ngondrotracker.common.exception.ItemAlreadyExistsException;
 import com.ngondrotracker.common.response.ResultResponse;
 import com.ngondrotracker.common.util.factory.ResultResponseFactory;
 import com.ngondrotracker.token.dto.TokenDto;
@@ -36,37 +35,22 @@ public class UserController extends AbstractRestController {
 
     @PostMapping(path = "/signup", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultResponse<UserAuthenticationResponse>> signup(@RequestBody @Valid UserSignUpRequest request) {
-        ResultResponse<UserAuthenticationResponse> response;
+        TokenDto token = authenticationService.signup(request.getEmail(), request.getPassword());
 
-        try {
-            TokenDto token = authenticationService.signup(request.getEmail(), request.getPassword());
+        String roles = userDetailsService.loadUserByUsername(request.getEmail())
+                .getAuthorities()
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(","));
 
-            String roles = userDetailsService.loadUserByUsername(request.getEmail())
-                    .getAuthorities()
-                    .stream()
-                    .map(Object::toString)
-                    .collect(Collectors.joining(","));
+        ResultResponse<UserAuthenticationResponse> response = new ResultResponseFactory<UserAuthenticationResponse>().successful(new UserAuthenticationResponse(token, roles));
 
-            response = new ResultResponseFactory<UserAuthenticationResponse>().successful(new UserAuthenticationResponse(token, roles));
-        } catch (ItemAlreadyExistsException e) {
-            response = new ResultResponseFactory<UserAuthenticationResponse>().notSuccessful(e.getMessage());
-        }
-
-        HttpStatus status = response.isSuccess() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST;
-
-        return new ResponseEntity<>(response, status);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PostMapping(path = "/signin", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultResponse<UserAuthenticationResponse>> signin(@RequestBody @Valid UserSignInRequest request) {
-        TokenDto token;
-        try {
-            token = authenticationService.signin(request.getEmail(), request.getPassword());
-        } catch (Exception e) {
-            ResultResponse<UserAuthenticationResponse> response = new ResultResponseFactory<UserAuthenticationResponse>().notSuccessful("Invalid email or password.");
-
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
+        TokenDto token = authenticationService.signin(request.getEmail(), request.getPassword());
 
         String roles = userDetailsService.loadUserByUsername(request.getEmail())
                 .getAuthorities()

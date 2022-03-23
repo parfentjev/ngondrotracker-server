@@ -9,7 +9,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 
 @SpringBootConfiguration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@ComponentScan(basePackages = {"com.ngondrotracker.meditation.controller"})
+@ComponentScan(basePackages = {
+        "com.ngondrotracker.meditation.controller",
+        "com.ngondrotracker.common"
+})
 public class MeditationTestApplication extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity security) throws Exception {

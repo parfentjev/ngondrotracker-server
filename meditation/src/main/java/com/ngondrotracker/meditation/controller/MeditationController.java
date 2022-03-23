@@ -1,8 +1,6 @@
 package com.ngondrotracker.meditation.controller;
 
 import com.ngondrotracker.common.controller.AbstractRestController;
-import com.ngondrotracker.common.exception.ItemAlreadyExistsException;
-import com.ngondrotracker.common.exception.ItemDoesNotExist;
 import com.ngondrotracker.common.response.BasicResponse;
 import com.ngondrotracker.common.response.ResultResponse;
 import com.ngondrotracker.common.util.factory.BasicResponseFactory;
@@ -30,18 +28,10 @@ public class MeditationController extends AbstractRestController {
     @PostMapping(path = "/", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @PreAuthorize(ADMIN_ROLE)
     public ResponseEntity<BasicResponse> createMeditation(@RequestBody @Valid MeditationCreateRequest request) {
-        BasicResponse response;
+        meditationService.create(request.getTitle(), request.getPath(), request.getGoal());
+        BasicResponse response = new BasicResponseFactory().successful();
 
-        try {
-            meditationService.create(request.getTitle(), request.getPath(), request.getGoal());
-            response = new BasicResponseFactory().successful();
-        } catch (ItemAlreadyExistsException e) {
-            response = new BasicResponseFactory().notSuccessful(e.getMessage());
-        }
-
-        HttpStatus status = response.isSuccess() ? HttpStatus.CREATED : HttpStatus.CONFLICT;
-
-        return new ResponseEntity<>(response, status);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/", produces = APPLICATION_JSON_VALUE)
@@ -54,18 +44,9 @@ public class MeditationController extends AbstractRestController {
 
     @GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultResponse<MeditationDto>> getMeditationByPath(@PathVariable(name = "id") String path) {
-        ResultResponse<MeditationDto> response;
+        MeditationDto meditationDto = meditationService.getByPath(path);
+        ResultResponse<MeditationDto> response = new ResultResponseFactory<MeditationDto>().successful(meditationDto);
 
-        try {
-            MeditationDto meditationDto = meditationService.getByPath(path);
-
-            response = new ResultResponseFactory<MeditationDto>().successful(meditationDto);
-        } catch (ItemDoesNotExist e) {
-            response = new ResultResponseFactory<MeditationDto>().notSuccessful(e.getMessage());
-        }
-
-        HttpStatus status = response.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
-
-        return new ResponseEntity<>(response, status);
+        return ResponseEntity.ok(response);
     }
 }

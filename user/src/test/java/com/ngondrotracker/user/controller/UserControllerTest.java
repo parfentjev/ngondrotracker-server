@@ -1,6 +1,6 @@
 package com.ngondrotracker.user.controller;
 
-import com.ngondrotracker.common.exception.ItemAlreadyExistsException;
+import com.ngondrotracker.common.exception.ResourceAlreadyExistsException;
 import com.ngondrotracker.token.dto.TokenDto;
 import com.ngondrotracker.token.service.TokenService;
 import com.ngondrotracker.user.service.UserAuthenticationService;
@@ -98,9 +98,9 @@ public class UserControllerTest {
 
     @Test
     @WithAnonymousUser
-    public void signInUserAlreadyExists() throws Exception {
+    public void signUpUserAlreadyExists() throws Exception {
         when(userAuthenticationService.signup(any(), any()))
-                .thenThrow(new ItemAlreadyExistsException());
+                .thenThrow(new ResourceAlreadyExistsException("User"));
 
         MockHttpServletRequestBuilder request = post("/user/signup")
                 .with(csrf())
@@ -110,7 +110,7 @@ public class UserControllerTest {
         mockMvc.perform(request)
                 .andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("success", is(false)))
-                .andExpect(jsonPath("message", is("ALREADY_EXISTS")));
+                .andExpect(jsonPath("message", is("User already exists")));
     }
 
     @Test

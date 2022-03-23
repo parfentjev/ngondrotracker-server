@@ -1,7 +1,7 @@
 package com.ngondrotracker.meditation.service;
 
-import com.ngondrotracker.common.exception.ItemAlreadyExistsException;
-import com.ngondrotracker.common.exception.ItemDoesNotExist;
+import com.ngondrotracker.common.exception.ResourceAlreadyExistsException;
+import com.ngondrotracker.common.exception.ResourceNotFoundException;
 import com.ngondrotracker.meditation.dto.MeditationDto;
 import com.ngondrotracker.meditation.entity.Meditation;
 import com.ngondrotracker.meditation.repository.MeditationRepository;
@@ -30,7 +30,7 @@ public class MeditationServiceImplTest {
     private MeditationServiceImpl meditationService;
 
     @Test
-    public void createMeditation() throws ItemAlreadyExistsException {
+    public void createMeditation() throws ResourceAlreadyExistsException {
         String title = "newMeditation";
         String path = "meditationPath";
         int goal = 100;
@@ -45,7 +45,7 @@ public class MeditationServiceImplTest {
     @Test
     public void createMeditationThatAlreadyExists() {
         when(meditationRepository.findByPath(any())).thenReturn(Optional.of(new Meditation()));
-        assertThrows(ItemAlreadyExistsException.class, () -> meditationService.create(null, null, 0));
+        assertThrows(ResourceAlreadyExistsException.class, () -> meditationService.create(null, null, 0));
         verify(meditationRepository, times(0)).save((any()));
     }
 
@@ -70,7 +70,7 @@ public class MeditationServiceImplTest {
     @Test
     public void getMeditationByMathDoesNotExist() {
         when(meditationRepository.findByPath(any())).thenReturn(Optional.empty());
-        assertThrows(ItemDoesNotExist.class, () -> meditationService.getByPath(null));
+        assertThrows(ResourceNotFoundException.class, () -> meditationService.getByPath(null));
     }
 
     @Test

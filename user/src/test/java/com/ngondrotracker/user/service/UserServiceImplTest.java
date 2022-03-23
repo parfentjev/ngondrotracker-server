@@ -1,6 +1,6 @@
 package com.ngondrotracker.user.service;
 
-import com.ngondrotracker.common.exception.ItemAlreadyExistsException;
+import com.ngondrotracker.common.exception.ResourceAlreadyExistsException;
 import com.ngondrotracker.user.entity.User;
 import com.ngondrotracker.user.repository.UserRepository;
 import com.ngondrotracker.user.service.impl.UserServiceImpl;
@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,7 +25,7 @@ public class UserServiceImplTest {
     private UserServiceImpl userService;
 
     @Test
-    public void createUser() throws ItemAlreadyExistsException {
+    public void createUser() throws ResourceAlreadyExistsException {
         final String email = "user@host.com";
         final String password = "userPassword";
 
@@ -39,7 +38,7 @@ public class UserServiceImplTest {
     @Test
     public void createUserThatAlreadyExists() {
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(new User()));
-        assertThrows(ItemAlreadyExistsException.class, () -> userService.create(null, null));
+        assertThrows(ResourceAlreadyExistsException.class, () -> userService.create(null, null));
         verify(userRepository, times(0)).save(any());
     }
 

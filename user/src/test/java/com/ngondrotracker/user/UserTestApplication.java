@@ -9,7 +9,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 
 @SpringBootConfiguration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@ComponentScan(basePackages = {"com.ngondrotracker.user.controller"})
+@ComponentScan(basePackages = {
+        "com.ngondrotracker.user.controller",
+        "com.ngondrotracker.common"
+})
 public class UserTestApplication extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity security) throws Exception {
