@@ -1,6 +1,8 @@
 package com.ngondrotracker.user.service;
 
 import com.ngondrotracker.common.exception.ResourceAlreadyExistsException;
+import com.ngondrotracker.common.exception.ResourceNotFoundException;
+import com.ngondrotracker.user.dto.UserDto;
 import com.ngondrotracker.user.entity.User;
 import com.ngondrotracker.user.repository.UserRepository;
 import com.ngondrotracker.user.service.impl.UserServiceImpl;
@@ -29,10 +31,9 @@ public class UserServiceImplTest {
         final String email = "user@host.com";
         final String password = "userPassword";
 
-        User newUser = userService.create(email, password);
+        UserDto newUser = userService.create(email, password);
         verify(userRepository, times(1)).save(any());
         assertEquals(email, newUser.getEmail());
-        assertEquals(password, newUser.getPassword());
     }
 
     @Test
@@ -45,12 +46,13 @@ public class UserServiceImplTest {
     @Test
     public void userExists() {
         when(userRepository.findByEmail("user@host.com")).thenReturn(Optional.of(new User()));
-        assertTrue(userService.findUserByEmail("user@host.com").isPresent());
+        UserDto userDto = userService.findUserByEmail("user@host.com");
+        assertEquals("user@host.com", userDto.getEmail());
     }
 
     @Test
     public void userDoesNotExist() {
         when(userRepository.findByEmail("user@host.com")).thenReturn(Optional.empty());
-        assertFalse(userService.findUserByEmail("user@host.com").isPresent());
+        assertThrows(ResourceNotFoundException.class, () -> userService.findUserByEmail("user@host.com"));
     }
 }

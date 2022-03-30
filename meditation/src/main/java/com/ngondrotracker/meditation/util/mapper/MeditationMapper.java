@@ -8,7 +8,7 @@ public class MeditationMapper {
     public MeditationDto entityToDto(Meditation meditation) {
         MeditationDto meditationDto = new MeditationDto();
         meditationDto.setTitle(meditation.getTitle());
-        meditationDto.setPath(meditation.getPath());
+        meditationDto.setId(meditation.getId());
         meditationDto.setGoal(meditation.getGoal());
         meditationDto.setOrder(meditation.getOrder());
 
@@ -18,7 +18,7 @@ public class MeditationMapper {
     public Meditation dtoToEntity(MeditationDto meditationDto) {
         Meditation meditation = new Meditation();
         meditation.setTitle(meditationDto.getTitle());
-        meditation.setPath(meditationDto.getPath());
+        meditation.setId(meditationDto.getId());
         meditation.setGoal(meditationDto.getGoal());
         meditation.setOrder(meditationDto.getOrder());
 
@@ -28,7 +28,7 @@ public class MeditationMapper {
     public MeditationDto createRequestToDto(MeditationCreateRequest request) {
         MeditationDto meditationDto = new MeditationDto();
         meditationDto.setTitle(request.getTitle());
-        meditationDto.setPath(request.getPath());
+        meditationDto.setId(request.getPath());
         meditationDto.setGoal(request.getGoal());
         meditationDto.setOrder(request.getOrder());
 

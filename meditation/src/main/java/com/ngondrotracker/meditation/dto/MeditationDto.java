@@ -6,7 +6,7 @@ import lombok.Data;
 public class MeditationDto {
     private String title;
 
-    private String path;
+    private String id;
 
     private Integer goal;
 

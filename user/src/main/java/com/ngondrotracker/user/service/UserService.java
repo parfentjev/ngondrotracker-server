@@ -1,12 +1,10 @@
 package com.ngondrotracker.user.service;
 
 import com.ngondrotracker.common.exception.ResourceAlreadyExistsException;
-import com.ngondrotracker.user.entity.User;
-
-import java.util.Optional;
+import com.ngondrotracker.user.dto.UserDto;
 
 public interface UserService {
-    Optional<User> findUserByEmail(String username);
+    UserDto findUserByEmail(String username);
 
-    User create(String username, String password) throws ResourceAlreadyExistsException;
+    UserDto create(String username, String password) throws ResourceAlreadyExistsException;
 }

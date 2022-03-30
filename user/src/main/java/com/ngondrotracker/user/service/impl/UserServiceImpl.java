@@ -1,14 +1,16 @@
 package com.ngondrotracker.user.service.impl;
 
 import com.ngondrotracker.common.exception.ResourceAlreadyExistsException;
-import com.ngondrotracker.user.enums.UserRole;
+import com.ngondrotracker.common.exception.ResourceNotFoundException;
+import com.ngondrotracker.user.dto.UserDto;
 import com.ngondrotracker.user.entity.User;
+import com.ngondrotracker.user.enums.UserRole;
 import com.ngondrotracker.user.repository.UserRepository;
 import com.ngondrotracker.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import static com.ngondrotracker.user.util.UserUtils.userMapper;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -16,13 +18,15 @@ public class UserServiceImpl implements UserService {
     private UserRepository repository;
 
     @Override
-    public Optional<User> findUserByEmail(String email) {
-        return repository.findByEmail(email);
+    public UserDto findUserByEmail(String email) {
+        User user = repository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
+
+        return userMapper().entityToDto(user);
     }
 
     @Override
-    public User create(String email, String password) throws ResourceAlreadyExistsException {
-        if (findUserByEmail(email).isPresent())
+    public UserDto create(String email, String password) throws ResourceAlreadyExistsException {
+        if (repository.findByEmail(email).isPresent())
             throw new ResourceAlreadyExistsException("User");
 
         User user = new User();
@@ -32,6 +36,6 @@ public class UserServiceImpl implements UserService {
 
         repository.save(user);
 
-        return user;
+        return userMapper().entityToDto(user);
     }
 }

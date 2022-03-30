@@ -14,7 +14,7 @@ public class Meditation {
 
     @Id
     @Column(name = "path", nullable = false)
-    private String path;
+    private String id;
 
     @Column(name = "goal", nullable = false)
     private Integer goal;
