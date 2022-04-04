@@ -37,13 +37,13 @@ public class MeditationServiceImplTest {
 
         MeditationDto requestDto = new MeditationDto();
         requestDto.setTitle(title);
-        requestDto.setId(path);
+        requestDto.setPath(path);
         requestDto.setGoal(intGoal);
 
         MeditationDto meditationDto = meditationService.create(requestDto);
         verify(meditationRepository, times(1)).save(any());
         assertEquals(title, meditationDto.getTitle());
-        assertEquals(path, meditationDto.getId());
+        assertEquals(path, meditationDto.getPath());
         assertEquals(intGoal, meditationDto.getGoal());
     }
 
@@ -62,13 +62,13 @@ public class MeditationServiceImplTest {
 
         Meditation meditation = new Meditation();
         meditation.setTitle(title);
-        meditation.setId(path);
+        meditation.setPath(path);
         meditation.setGoal(goal);
 
         when(meditationRepository.findByPath(path)).thenReturn(Optional.of(meditation));
         MeditationDto meditationDto = meditationService.getByPath(path);
         assertEquals(title, meditationDto.getTitle());
-        assertEquals(path, meditationDto.getId());
+        assertEquals(path, meditationDto.getPath());
         assertEquals(goal, meditationDto.getGoal());
     }
 

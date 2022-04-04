@@ -2,19 +2,21 @@ package com.ngondrotracker.meditation.entity;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
 public class Meditation {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Id
     @Column(name = "path", nullable = false)
-    private String id;
+    private String path;
 
     @Column(name = "goal", nullable = false)
     private Integer goal;

@@ -4,9 +4,11 @@ import lombok.Data;
 
 @Data
 public class MeditationDto {
+    private Long id;
+
     private String title;
 
-    private String id;
+    private String path;
 
     private Integer goal;
 

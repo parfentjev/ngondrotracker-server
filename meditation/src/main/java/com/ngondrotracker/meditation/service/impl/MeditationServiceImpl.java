@@ -21,7 +21,7 @@ public class MeditationServiceImpl implements MeditationService {
 
     @Override
     public MeditationDto create(MeditationDto meditationDto) {
-        if (repository.findByPath(meditationDto.getId()).isPresent()) {
+        if (repository.findByPath(meditationDto.getPath()).isPresent()) {
             throw new ResourceAlreadyExistsException("Meditation");
         }
 

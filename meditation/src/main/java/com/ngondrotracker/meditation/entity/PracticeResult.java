@@ -1,12 +1,9 @@
 package com.ngondrotracker.meditation.entity;
 
-import com.ngondrotracker.user.dto.UserDto;
+import com.ngondrotracker.user.entity.User;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.TimeZone;
 
 @Data
@@ -26,8 +23,10 @@ public class PracticeResult {
     private Integer repetitions;
 
     @Column(name = "user_id", nullable = false)
-    private UserDto user;
+    @ManyToOne
+    private User user;
 
     @Column(name = "meditation_id", nullable = false)
+    @ManyToOne
     private Meditation meditation;
 }

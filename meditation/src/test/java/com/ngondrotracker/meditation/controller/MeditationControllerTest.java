@@ -47,7 +47,7 @@ public class MeditationControllerTest {
 
         MeditationDto meditationDto = new MeditationDto();
         meditationDto.setTitle(title);
-        meditationDto.setId(path);
+        meditationDto.setPath(path);
         meditationDto.setGoal(goal);
         meditationDto.setOrder(order);
 
@@ -78,7 +78,7 @@ public class MeditationControllerTest {
 
         MeditationDto meditationDto = new MeditationDto();
         meditationDto.setTitle(title);
-        meditationDto.setId(path);
+        meditationDto.setPath(path);
         meditationDto.setGoal(goal);
         meditationDto.setOrder(order);
 
@@ -155,7 +155,7 @@ public class MeditationControllerTest {
 
         MeditationDto meditationDto = new MeditationDto();
         meditationDto.setTitle(title);
-        meditationDto.setId(path);
+        meditationDto.setPath(path);
         meditationDto.setGoal(goal);
         meditationDto.setOrder(order);
 
@@ -192,13 +192,13 @@ public class MeditationControllerTest {
 
         MeditationDto meditationDto1 = new MeditationDto();
         meditationDto1.setTitle("m1");
-        meditationDto1.setId("p1");
+        meditationDto1.setPath("p1");
         meditationDto1.setGoal(1);
         meditationDto1.setOrder(1);
 
         MeditationDto meditationDto2 = new MeditationDto();
         meditationDto2.setTitle("m2");
-        meditationDto2.setId("p2");
+        meditationDto2.setPath("p2");
         meditationDto2.setGoal(2);
         meditationDto2.setOrder(2);
 
