@@ -6,6 +6,9 @@ import javax.persistence.*;
 
 @Data
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = "path", name = "uniquePathConstraint")
+})
 public class Meditation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
