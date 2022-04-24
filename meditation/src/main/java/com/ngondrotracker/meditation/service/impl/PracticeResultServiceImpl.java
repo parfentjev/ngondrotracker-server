@@ -2,6 +2,7 @@ package com.ngondrotracker.meditation.service.impl;
 
 import com.ngondrotracker.meditation.dto.MeditationDto;
 import com.ngondrotracker.meditation.dto.PracticeResultDto;
+import com.ngondrotracker.meditation.dto.PracticeSummaryDto;
 import com.ngondrotracker.meditation.repository.PracticeResultRepository;
 import com.ngondrotracker.meditation.service.PracticeResultService;
 import com.ngondrotracker.user.dto.UserDto;
@@ -26,12 +27,12 @@ public class PracticeResultServiceImpl implements PracticeResultService {
     }
 
     @Override
-    public List<PracticeResultDto> getResultByUserAndMeditation(UserDto userDto, MeditationDto meditationDto) {
+    public List<PracticeResultDto> getResult(UserDto userDto, MeditationDto meditationDto) {
         return null;
     }
 
     @Override
-    public Integer getSummaryByUserAndMeditation(UserDto userDto, MeditationDto meditationDto) {
+    public PracticeSummaryDto getSummary(UserDto userDto, MeditationDto meditationDto) {
         return null;
     }
 }

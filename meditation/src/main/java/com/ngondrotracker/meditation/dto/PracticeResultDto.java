@@ -1,5 +1,6 @@
 package com.ngondrotracker.meditation.dto;
 
+import com.ngondrotracker.user.dto.UserDto;
 import lombok.Data;
 
 import java.util.TimeZone;
@@ -14,5 +15,7 @@ public class PracticeResultDto {
 
     private Integer repetitions;
 
-    private MeditationDto meditation;
+    private UserDto userDto;
+
+    private MeditationDto meditationDto;
 }

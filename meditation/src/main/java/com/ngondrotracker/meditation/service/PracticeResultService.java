@@ -2,6 +2,7 @@ package com.ngondrotracker.meditation.service;
 
 import com.ngondrotracker.meditation.dto.MeditationDto;
 import com.ngondrotracker.meditation.dto.PracticeResultDto;
+import com.ngondrotracker.meditation.dto.PracticeSummaryDto;
 import com.ngondrotracker.user.dto.UserDto;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface PracticeResultService {
 
     void deleteResult(PracticeResultDto practiceResultDto);
 
-    List<PracticeResultDto> getResultByUserAndMeditation(UserDto userDto, MeditationDto meditationDto);
+    List<PracticeResultDto> getResult(UserDto userDto, MeditationDto meditationDto);
 
-    Integer getSummaryByUserAndMeditation(UserDto userDto, MeditationDto meditationDto);
+    PracticeSummaryDto getSummary(UserDto userDto, MeditationDto meditationDto);
 }
