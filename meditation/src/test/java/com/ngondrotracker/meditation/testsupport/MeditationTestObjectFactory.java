@@ -24,6 +24,14 @@ public class MeditationTestObjectFactory {
         return meditationDto;
     }
 
+    public MeditationDto meditationDto(long id, String path) {
+        MeditationDto meditationDto = new MeditationDto();
+        meditationDto.setId(id);
+        meditationDto.setPath(path);
+
+        return meditationDto;
+    }
+
     public MeditationDto meditationDto(long id, String title, String path, int goal, int order) {
         MeditationDto meditationDto = new MeditationDto();
         meditationDto.setId(id);
@@ -76,6 +84,22 @@ public class MeditationTestObjectFactory {
     public UserDto userDto(long id) {
         UserDto userDto = new UserDto();
         userDto.setId(id);
+
+        return userDto;
+    }
+
+    public User user(long id, String email) {
+        User user = new User();
+        user.setId(id);
+        user.setEmail(email);
+
+        return user;
+    }
+
+    public UserDto userDto(long id, String email) {
+        UserDto userDto = new UserDto();
+        userDto.setId(id);
+        userDto.setEmail(email);
 
         return userDto;
     }

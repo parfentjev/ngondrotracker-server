@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface MeditationRepository extends CrudRepository<Meditation, String> {
+public interface MeditationRepository extends CrudRepository<Meditation, Long> {
     Optional<Meditation> findByPath(String path);
 
     List<Meditation> findAll();

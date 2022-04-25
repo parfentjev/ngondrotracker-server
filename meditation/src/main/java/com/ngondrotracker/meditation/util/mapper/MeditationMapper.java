@@ -7,6 +7,7 @@ import com.ngondrotracker.meditation.dto.MeditationDto;
 public class MeditationMapper {
     public MeditationDto entityToDto(Meditation meditation) {
         MeditationDto meditationDto = new MeditationDto();
+        meditationDto.setId(meditation.getId());
         meditationDto.setTitle(meditation.getTitle());
         meditationDto.setPath(meditation.getPath());
         meditationDto.setGoal(meditation.getGoal());
@@ -17,6 +18,7 @@ public class MeditationMapper {
 
     public Meditation dtoToEntity(MeditationDto meditationDto) {
         Meditation meditation = new Meditation();
+        meditation.setId(meditation.getId());
         meditation.setTitle(meditationDto.getTitle());
         meditation.setPath(meditationDto.getPath());
         meditation.setGoal(meditationDto.getGoal());

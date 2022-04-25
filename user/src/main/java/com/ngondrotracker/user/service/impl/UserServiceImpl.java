@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto create(String email, String password) throws ResourceAlreadyExistsException {
+    public UserDto create(String email, String password) {
         if (repository.findByEmail(email).isPresent())
             throw new ResourceAlreadyExistsException("User");
 

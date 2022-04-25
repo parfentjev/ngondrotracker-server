@@ -8,9 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ResponseEntityExceptionHandler {
@@ -23,7 +26,13 @@ public class ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<BasicResponse> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
-        BasicResponse response = new BasicResponseFactory().notSuccessful("Validation error");
+        String validationErrors = e.getBindingResult()
+                .getAllErrors()
+                .stream()
+                .map(error -> String.format("%s: %s", ((FieldError) error).getField(), error.getDefaultMessage()))
+                .collect(Collectors.joining(","));
+
+        BasicResponse response = new BasicResponseFactory().notSuccessful(validationErrors);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }

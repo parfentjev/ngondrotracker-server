@@ -17,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.access.AccessDeniedException;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -47,15 +48,17 @@ public class PracticeResultServiceImplTest {
     @Test
     public void addResult() {
         Meditation meditation = testObjectFactory().meditation(1L);
-        MeditationDto meditationDto = testObjectFactory().meditationDto(1L);
+        MeditationDto meditationDto = testObjectFactory().meditationDto(1L, "path");
 
         User user = testObjectFactory().user(2L);
         UserDto userDto = testObjectFactory().userDto(2L);
+        userDto.setEmail("username");
 
         PracticeResult practiceResult = testObjectFactory().practiceResult(3L, 33L, "Europe/Tallinn", 108, user, meditation);
         PracticeResultDto practiceResultDto = testObjectFactory().practiceResultDto(3L, 33L, "Europe/Tallinn", 108, userDto, meditationDto);
 
-        when(userService.findUserByEmail("username")).thenReturn(userDto);
+        when(userService.findUserByEmail(userDto.getEmail())).thenReturn(userDto);
+        when(meditationService.getByPath(meditationDto.getPath())).thenReturn(meditationDto);
         when(practiceResultRepository.save(any())).thenReturn(practiceResult);
 
         PracticeResultDto responseDto = practiceResultService.addResult(practiceResultDto);
@@ -66,48 +69,61 @@ public class PracticeResultServiceImplTest {
         assertEquals(practiceResultDto.getUserDto().getId(), responseDto.getUserDto().getId());
         assertEquals(practiceResultDto.getMeditationDto().getId(), responseDto.getMeditationDto().getId());
 
-        verify(practiceResultRepository, times(1)).save(practiceResult);
+        verify(practiceResultRepository, times(1)).save(any());
     }
 
     @Test
     public void deleteExistingResult() {
-        PracticeResultDto practiceResultDto = testObjectFactory().practiceResultDto(1L);
-        User user = testObjectFactory().user(1L);
-        UserDto userDto = testObjectFactory().userDto(1L);
+        User user = testObjectFactory().user(1L, "username");
+        UserDto userDto = testObjectFactory().userDto(1L, "username");
 
-        PracticeResult practiceResult = testObjectFactory().practiceResult(1L, 1L, null, 1, user, null);
+        Meditation meditation = testObjectFactory().meditation(1L);
+        MeditationDto meditationDto = testObjectFactory().meditationDto(1L, "path");
+
+        PracticeResultDto practiceResultDto = testObjectFactory().practiceResultDto(1L, 1L, "Europe/Tallinn", 1, userDto, meditationDto);
+        PracticeResult practiceResult = testObjectFactory().practiceResult(1L, 1L, "Europe/Tallinn", 1, user, meditation);
 
         when(userService.findUserByEmail("username")).thenReturn(userDto);
+        when(meditationService.getByPath(meditationDto.getPath())).thenReturn(meditationDto);
         when(practiceResultRepository.findById(1L)).thenReturn(Optional.of(practiceResult));
 
         practiceResultService.deleteResult(practiceResultDto);
-        verify(practiceResultRepository, times(1)).delete(practiceResult);
+        verify(practiceResultRepository, times(1)).delete(any());
     }
 
     @Test
     public void deleteNotExistingResult() {
-        PracticeResultDto practiceResultDto = testObjectFactory().practiceResultDto(1L);
+        UserDto userDto = testObjectFactory().userDto(1L, "username");
+        MeditationDto meditationDto = testObjectFactory().meditationDto(1L, "path");
 
-        PracticeResult practiceResult = new PracticeResult();
+        PracticeResultDto practiceResultDto = testObjectFactory().practiceResultDto(1L);
+        practiceResultDto.setUserDto(userDto);
+        practiceResultDto.setMeditationDto(meditationDto);
+
+        when(userService.findUserByEmail(userDto.getEmail())).thenReturn(userDto);
+        when(meditationService.getByPath(meditationDto.getPath())).thenReturn(meditationDto);
         when(practiceResultRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> practiceResultService.deleteResult(practiceResultDto));
-        verify(practiceResultRepository, times(0)).delete(practiceResult);
+        verify(practiceResultRepository, times(0)).delete(any());
     }
 
     @Test
     public void deleteResultOfAnotherUser() {
-        PracticeResultDto practiceResultDto = testObjectFactory().practiceResultDto(1L);
+        UserDto resultRequester = testObjectFactory().userDto(1L, "username");
+        MeditationDto meditationDto = testObjectFactory().meditationDto(1L, "path");
 
-        UserDto resultRequester = testObjectFactory().userDto(1L);
-        User resultOwner = testObjectFactory().user(2L);
-        PracticeResult practiceResult = testObjectFactory().practiceResult(1L, 1L, null, 1, resultOwner, null);
+        PracticeResultDto practiceResultDto = testObjectFactory().practiceResultDto(1L, 1L, "Europe/Tallinn", 1, resultRequester, meditationDto);
+
+        User resultOwner = testObjectFactory().user(2L, "username2");
+        PracticeResult practiceResult = testObjectFactory().practiceResult(1L, 1L, "Europe/Tallinn", 1, resultOwner, new Meditation());
 
         when(userService.findUserByEmail("username")).thenReturn(resultRequester);
+        when(meditationService.getByPath(meditationDto.getPath())).thenReturn(meditationDto);
         when(practiceResultRepository.findById(1L)).thenReturn(Optional.of(practiceResult));
 
-        practiceResultService.deleteResult(practiceResultDto);
-        verify(practiceResultRepository, times(0)).delete(practiceResult);
+        assertThrows(AccessDeniedException.class, () -> practiceResultService.deleteResult(practiceResultDto));
+        verify(practiceResultRepository, times(0)).delete(any());
     }
 
     @Test

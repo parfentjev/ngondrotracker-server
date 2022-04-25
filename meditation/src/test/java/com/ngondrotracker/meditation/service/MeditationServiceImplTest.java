@@ -55,7 +55,7 @@ public class MeditationServiceImplTest {
     }
 
     @Test
-    public void getMeditationByMath() {
+    public void getMeditationByPath() {
         String title = "title";
         String path = "path";
         int goal = 100;
@@ -76,6 +76,33 @@ public class MeditationServiceImplTest {
     public void getMeditationByMathDoesNotExist() {
         when(meditationRepository.findByPath(any())).thenReturn(Optional.empty());
         assertThrows(ResourceNotFoundException.class, () -> meditationService.getByPath(null));
+    }
+
+    @Test
+    public void getMeditationById() {
+        long id = 1L;
+        String title = "title";
+        String path = "path";
+        int goal = 100;
+
+        Meditation meditation = new Meditation();
+        meditation.setId(id);
+        meditation.setTitle(title);
+        meditation.setPath(path);
+        meditation.setGoal(goal);
+
+        when(meditationRepository.findById(meditation.getId())).thenReturn(Optional.of(meditation));
+        MeditationDto meditationDto = meditationService.getById(meditation.getId());
+        assertEquals(id, meditationDto.getId());
+        assertEquals(title, meditationDto.getTitle());
+        assertEquals(path, meditationDto.getPath());
+        assertEquals(goal, meditationDto.getGoal());
+    }
+
+    @Test
+    public void getMeditationByIdDoesNotExist() {
+        when(meditationRepository.findById(1L)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> meditationService.getById(1L));
     }
 
     @Test
