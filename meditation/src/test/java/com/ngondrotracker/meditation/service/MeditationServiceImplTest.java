@@ -66,7 +66,7 @@ public class MeditationServiceImplTest {
         meditation.setGoal(goal);
 
         when(meditationRepository.findByPath(path)).thenReturn(Optional.of(meditation));
-        MeditationDto meditationDto = meditationService.getByPath(path);
+        MeditationDto meditationDto = meditationService.findMeditationByPath(path);
         assertEquals(title, meditationDto.getTitle());
         assertEquals(path, meditationDto.getPath());
         assertEquals(goal, meditationDto.getGoal());
@@ -75,7 +75,7 @@ public class MeditationServiceImplTest {
     @Test
     public void getMeditationByMathDoesNotExist() {
         when(meditationRepository.findByPath(any())).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> meditationService.getByPath(null));
+        assertThrows(ResourceNotFoundException.class, () -> meditationService.findMeditationByPath(null));
     }
 
     @Test

@@ -159,7 +159,7 @@ public class MeditationControllerTest {
         meditationDto.setGoal(goal);
         meditationDto.setOrder(order);
 
-        when(meditationService.getByPath(path)).thenReturn(meditationDto);
+        when(meditationService.findMeditationByPath(path)).thenReturn(meditationDto);
 
         MockHttpServletRequestBuilder request = get("/meditations/" + path);
 
@@ -176,7 +176,7 @@ public class MeditationControllerTest {
     public void getMeditationByMathDoesNotExist() throws Exception {
         String path = "newPath";
 
-        when(meditationService.getByPath(path)).thenThrow(new ResourceNotFoundException("Meditation", "path", "x"));
+        when(meditationService.findMeditationByPath(path)).thenThrow(new ResourceNotFoundException("Meditation", "path", "x"));
 
         MockHttpServletRequestBuilder request = get("/meditations/" + path);
 

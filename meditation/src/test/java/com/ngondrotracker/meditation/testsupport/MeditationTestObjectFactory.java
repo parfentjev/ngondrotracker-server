@@ -17,6 +17,14 @@ public class MeditationTestObjectFactory {
         return meditation;
     }
 
+    public Meditation meditation(long id, String path) {
+        Meditation meditation = new Meditation();
+        meditation.setId(id);
+        meditation.setPath(path);
+
+        return meditation;
+    }
+
     public MeditationDto meditationDto(long id) {
         MeditationDto meditationDto = new MeditationDto();
         meditationDto.setId(id);

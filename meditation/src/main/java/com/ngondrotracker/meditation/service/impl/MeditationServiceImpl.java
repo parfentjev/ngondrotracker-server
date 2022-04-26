@@ -31,7 +31,7 @@ public class MeditationServiceImpl implements MeditationService {
     }
 
     @Override
-    public MeditationDto getByPath(String path) {
+    public MeditationDto findMeditationByPath(String path) {
         Meditation meditation = repository.findByPath(path).orElseThrow(() -> new ResourceNotFoundException("Meditation", "path", path));
 
         return meditationMapper().entityToDto(meditation);

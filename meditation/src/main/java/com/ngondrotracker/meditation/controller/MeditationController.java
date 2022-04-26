@@ -43,7 +43,7 @@ public class MeditationController extends AbstractRestController {
 
     @GetMapping(path = "{path}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultResponse<MeditationDto>> getMeditationByPath(@PathVariable(name = "path") String path) {
-        MeditationDto meditationDto = meditationService.getByPath(path);
+        MeditationDto meditationDto = meditationService.findMeditationByPath(path);
         ResultResponse<MeditationDto> response = new ResultResponseFactory<MeditationDto>().successful(meditationDto);
 
         return ResponseEntity.ok(response);

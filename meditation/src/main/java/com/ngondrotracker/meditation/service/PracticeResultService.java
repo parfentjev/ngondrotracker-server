@@ -12,7 +12,7 @@ public interface PracticeResultService {
 
     void deleteResult(PracticeResultDto practiceResultDto);
 
-    List<PracticeResultDto> getResult(UserDto userDto, MeditationDto meditationDto);
+    List<PracticeResultDto> getResults(UserDto userDto, MeditationDto meditationDto);
 
     PracticeSummaryDto getSummary(UserDto userDto, MeditationDto meditationDto);
 }

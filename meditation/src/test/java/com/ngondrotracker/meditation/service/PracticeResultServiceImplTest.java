@@ -58,7 +58,7 @@ public class PracticeResultServiceImplTest {
         PracticeResultDto practiceResultDto = testObjectFactory().practiceResultDto(3L, 33L, "Europe/Tallinn", 108, userDto, meditationDto);
 
         when(userService.findUserByEmail(userDto.getEmail())).thenReturn(userDto);
-        when(meditationService.getByPath(meditationDto.getPath())).thenReturn(meditationDto);
+        when(meditationService.findMeditationByPath(meditationDto.getPath())).thenReturn(meditationDto);
         when(practiceResultRepository.save(any())).thenReturn(practiceResult);
 
         PracticeResultDto responseDto = practiceResultService.addResult(practiceResultDto);
@@ -84,7 +84,7 @@ public class PracticeResultServiceImplTest {
         PracticeResult practiceResult = testObjectFactory().practiceResult(1L, 1L, "Europe/Tallinn", 1, user, meditation);
 
         when(userService.findUserByEmail("username")).thenReturn(userDto);
-        when(meditationService.getByPath(meditationDto.getPath())).thenReturn(meditationDto);
+        when(meditationService.findMeditationByPath(meditationDto.getPath())).thenReturn(meditationDto);
         when(practiceResultRepository.findById(1L)).thenReturn(Optional.of(practiceResult));
 
         practiceResultService.deleteResult(practiceResultDto);
@@ -101,7 +101,7 @@ public class PracticeResultServiceImplTest {
         practiceResultDto.setMeditationDto(meditationDto);
 
         when(userService.findUserByEmail(userDto.getEmail())).thenReturn(userDto);
-        when(meditationService.getByPath(meditationDto.getPath())).thenReturn(meditationDto);
+        when(meditationService.findMeditationByPath(meditationDto.getPath())).thenReturn(meditationDto);
         when(practiceResultRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> practiceResultService.deleteResult(practiceResultDto));
@@ -119,7 +119,7 @@ public class PracticeResultServiceImplTest {
         PracticeResult practiceResult = testObjectFactory().practiceResult(1L, 1L, "Europe/Tallinn", 1, resultOwner, new Meditation());
 
         when(userService.findUserByEmail("username")).thenReturn(resultRequester);
-        when(meditationService.getByPath(meditationDto.getPath())).thenReturn(meditationDto);
+        when(meditationService.findMeditationByPath(meditationDto.getPath())).thenReturn(meditationDto);
         when(practiceResultRepository.findById(1L)).thenReturn(Optional.of(practiceResult));
 
         assertThrows(AccessDeniedException.class, () -> practiceResultService.deleteResult(practiceResultDto));
@@ -128,19 +128,21 @@ public class PracticeResultServiceImplTest {
 
     @Test
     public void getResultByUserAndMeditation() {
-        UserDto userDto = testObjectFactory().userDto(1L);
-        MeditationDto meditationDto = testObjectFactory().meditationDto(1L);
+        UserDto userDto = testObjectFactory().userDto(1L, "username");
+        MeditationDto meditationDto = testObjectFactory().meditationDto(2L, "path");
 
-        User user = testObjectFactory().user(1L);
-        Meditation meditation = testObjectFactory().meditation(1L);
+        User user = testObjectFactory().user(1L, "username");
+        Meditation meditation = testObjectFactory().meditation(2L, "path");
 
         PracticeResult practiceResult1 = testObjectFactory().practiceResult(1L, 1650800014, "Europe/Tallinn", 108, user, meditation);
         PracticeResult practiceResult2 = testObjectFactory().practiceResult(2L, 1650800015, "Europe/Riga", 216, user, meditation);
         List<PracticeResult> practiceResultList = Arrays.asList(practiceResult1, practiceResult2);
 
+        when(userService.findUserByEmail(userDto.getEmail())).thenReturn(userDto);
+        when(meditationService.findMeditationByPath(meditationDto.getPath())).thenReturn(meditationDto);
         when(practiceResultRepository.findAllByUserAndMeditation(user.getId(), meditation.getId())).thenReturn(practiceResultList);
 
-        List<PracticeResultDto> practiceResultDtoList = practiceResultService.getResult(userDto, meditationDto);
+        List<PracticeResultDto> practiceResultDtoList = practiceResultService.getResults(userDto, meditationDto);
         assertEquals(2, practiceResultDtoList.size());
 
         PracticeResultDto practiceResultDto1 = practiceResultDtoList.get(0);
@@ -160,23 +162,19 @@ public class PracticeResultServiceImplTest {
 
     @Test
     public void getResultByUserAndMeditationWithResourceNotFoundException() {
-        UserDto userDto = testObjectFactory().userDto(1L);
-        MeditationDto meditationDto = testObjectFactory().meditationDto(2L);
+        UserDto userDto = testObjectFactory().userDto(1L, "username");
+        MeditationDto meditationDto = testObjectFactory().meditationDto(2L, "path");
 
+        when(userService.findUserByEmail(userDto.getEmail())).thenReturn(userDto);
+        when(meditationService.findMeditationByPath(meditationDto.getPath())).thenReturn(meditationDto);
         when(practiceResultRepository.findAllByUserAndMeditation(userDto.getId(), meditationDto.getId())).thenReturn(emptyList());
-        assertThrows(ResourceNotFoundException.class, () -> practiceResultService.getResult(userDto, meditationDto));
+        assertThrows(ResourceNotFoundException.class, () -> practiceResultService.getResults(userDto, meditationDto));
     }
 
     @Test
     public void getSummaryByUserAndMeditation() {
-        UserDto userDto = testObjectFactory().userDto(1L);
-        MeditationDto meditationDto = testObjectFactory().meditationDto(1L);
-
-        MeditationDto requestMeditationDto = new MeditationDto();
-        requestMeditationDto.setPath("test");
-
-        MeditationDto responseMeditationDto = testObjectFactory().meditationDto(1L, "title", "path", 1404, 0);
-
+        UserDto userDto = testObjectFactory().userDto(1L, "username");
+        MeditationDto meditationDto = testObjectFactory().meditationDto(1L, "title", "path", 1404, 0);
         User user = testObjectFactory().user(1L);
         Meditation meditation = testObjectFactory().meditation(1L);
 
@@ -184,15 +182,16 @@ public class PracticeResultServiceImplTest {
         PracticeResult practiceResult2 = testObjectFactory().practiceResult(2L, 1650800015, "Europe/Riga", 216, user, meditation);
         List<PracticeResult> practiceResultList = Arrays.asList(practiceResult1, practiceResult2);
 
+        when(userService.findUserByEmail(userDto.getEmail())).thenReturn(userDto);
+        when(meditationService.findMeditationByPath(meditationDto.getPath())).thenReturn(meditationDto);
         when(practiceResultRepository.findAllByUserAndMeditation(user.getId(), meditation.getId())).thenReturn(practiceResultList);
-        when(meditationService.getByPath(requestMeditationDto.getPath())).thenReturn(meditationDto);
 
         PracticeSummaryDto practiceSummaryDto = practiceResultService.getSummary(userDto, meditationDto);
-        assertEquals(responseMeditationDto.getId(), practiceSummaryDto.getMeditationDto().getId());
-        assertEquals(requestMeditationDto.getTitle(), practiceSummaryDto.getMeditationDto().getTitle());
-        assertEquals(requestMeditationDto.getGoal(), practiceSummaryDto.getMeditationDto().getGoal());
+        assertEquals(meditationDto.getId(), practiceSummaryDto.getMeditationDto().getId());
+        assertEquals(meditationDto.getTitle(), practiceSummaryDto.getMeditationDto().getTitle());
+        assertEquals(meditationDto.getGoal(), practiceSummaryDto.getMeditationDto().getGoal());
 
-        assertEquals(216, practiceSummaryDto.getRepetitions());
+        assertEquals(324, practiceSummaryDto.getRepetitions());
 
         assertEquals(practiceResult2.getId(), practiceSummaryDto.getLatestPracticeResult().getId());
         assertEquals(practiceResult2.getMeditation().getId(), practiceSummaryDto.getLatestPracticeResult().getMeditationDto().getId());
@@ -205,9 +204,11 @@ public class PracticeResultServiceImplTest {
 
     @Test
     public void getSummaryByUserAndMeditationWithResourceNotFoundException() {
-        UserDto userDto = testObjectFactory().userDto(1L);
-        MeditationDto meditationDto = testObjectFactory().meditationDto(2L);
+        UserDto userDto = testObjectFactory().userDto(1L, "username");
+        MeditationDto meditationDto = testObjectFactory().meditationDto(2L, "path");
 
+        when(userService.findUserByEmail(userDto.getEmail())).thenReturn(userDto);
+        when(meditationService.findMeditationByPath(meditationDto.getPath())).thenReturn(meditationDto);
         when(practiceResultRepository.findAllByUserAndMeditation(userDto.getId(), meditationDto.getId())).thenReturn(emptyList());
         assertThrows(ResourceNotFoundException.class, () -> practiceResultService.getSummary(userDto, meditationDto));
     }

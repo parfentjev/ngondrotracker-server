@@ -7,7 +7,7 @@ import java.util.List;
 public interface MeditationService {
     MeditationDto create(MeditationDto meditationDto);
 
-    MeditationDto getByPath(String path);
+    MeditationDto findMeditationByPath(String path);
 
     MeditationDto getById(long id);
 
